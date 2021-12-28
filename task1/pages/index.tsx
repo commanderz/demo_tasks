@@ -1,15 +1,21 @@
 import type { NextPage } from 'next'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
 import UserRec from '../components/UserRec'
 
+
 const Users: NextPage = () => {
 
   const namez = useFormInput('');
   const surnamez = useFormInput('');
+  const [userz, setUserz] = useState([
+    { id: "1", text1: "", text2: "", href: "#" }
 
+  ]);
+
+  //let users: Array<{ name: string, surname: string }> = [];// { name: string, surname: string };
 
   function useFormInput(defVal: string) {
     const [value, setValue] = useState(defVal);
@@ -23,8 +29,14 @@ const Users: NextPage = () => {
   }
 
   function userAdd() {
-    console.log('userAdd: name=' + namez + ', surname=' + surnamez);
+    setUserz([...userz, { id: userz.length + 1, text1: namez.value, text2: surnamez.value, href: '#' }]);
+    //let z = users.push({ name: namez.value, surname: surnamez.value });
+    //console.log('userAdd: name=' + namez.value + ', surname=' + surnamez.value + ', len=' + z);
   }
+
+
+
+  //useEffect(() => {    console.log(users)  })
 
   return (
     <div className={styles.container}>
@@ -50,9 +62,12 @@ const Users: NextPage = () => {
 
 
         <div className={styles.main2} >
-          <UserRec text=' text ' href='testhref'></UserRec>
+          {userz.map(itemz =>
+            <UserRec key={itemz.id} id={itemz.id} text1={itemz.text1} text2={itemz.text2} href='#'></UserRec>
+          )}
+
         </div>
-      </main>
+      </main >
 
       <footer className={styles.footer}>
         <a
@@ -66,7 +81,7 @@ const Users: NextPage = () => {
           </span>
         </a>
       </footer>
-    </div>
+    </div >
   )
 }
 
