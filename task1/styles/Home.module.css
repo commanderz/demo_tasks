@@ -12,6 +12,15 @@
   align-items: center;
 }
 
+.main2 {
+  min-height: 100vh;
+  padding: 4rem 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  
+}
+
 .footer {
   display: flex;
   flex: 1;
