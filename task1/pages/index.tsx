@@ -11,7 +11,7 @@ const Users: NextPage = () => {
   const namez = useFormInput('');
   const surnamez = useFormInput('');
   const [userz, setUserz] = useState([
-    { id: "1", text1: "", text2: "", href: "#" }
+    //{key:'123', id: "1", text1: "", text2: "", href: "#" } //вилучаємо для продакшина, потрібна лише для розробки
 
   ]);
 
@@ -28,8 +28,16 @@ const Users: NextPage = () => {
     };
   }
 
+  function userDel(idz: string) {
+    setUserz(userz.filter(p => p.id !== idz))
+  }
+
+  function userEdit() {
+
+  }
+
   function userAdd() {
-    setUserz([...userz, { id: userz.length + 1, text1: namez.value, text2: surnamez.value, href: '#' }]);
+    setUserz([...userz, { key: userz.length.toString() + '.' + Date.now().toString(), id: userz.length + 1, text1: namez.value, text2: surnamez.value, href: '#' }]);
     //let z = users.push({ name: namez.value, surname: surnamez.value });
     //console.log('userAdd: name=' + namez.value + ', surname=' + surnamez.value + ', len=' + z);
   }
@@ -63,7 +71,7 @@ const Users: NextPage = () => {
 
         <div className={styles.main2} >
           {userz.map(itemz =>
-            <UserRec key={itemz.id} id={itemz.id} text1={itemz.text1} text2={itemz.text2} href='#'></UserRec>
+            <UserRec key={itemz.key} id={itemz.id} text1={itemz.text1} text2={itemz.text2} href='#' userDel={userDel} userEdit={userEdit}></UserRec>
           )}
 
         </div>
