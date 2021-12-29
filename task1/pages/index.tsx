@@ -4,30 +4,69 @@ import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
 import UserRec from '../components/UserRec'
+import { AsyncLocalStorage } from 'async_hooks'
 
 
 const Users: NextPage = () => {
 
-  const namez = useFormInput('');
-  const surnamez = useFormInput('');
-  const [userz, setUserz] = useState([
+  const zUserList: string = 'UserList';//назва в LocalStorage для списку користувачів
+  const namez = useFormInput('', 'name');
+  const surnamez = useFormInput('', 'surname');
+  //const xxx: string = (localStorage.getItem('test1') null ? '' : localStorage.getItem('test1'));
+  const startVal: any = readFromLocalStorage(zUserList);
+  const [userz, setUserz] = useState(
+    startVal
     //{key:'123', id: "1", text1: "", text2: "", href: "#" } //вилучаємо для продакшина, потрібна лише для розробки
-  ]);
+    //localStorage.getItem('qwerty')
+    //JSON.parse(xxx)
+  );
   const [userEditMode, setUserEditMode] = useState(-1
     //{key: id: text1 text2}
   );
 
   //let users: Array<{ name: string, surname: string }> = [];// { name: string, surname: string };
 
-  function useFormInput(defVal: string) {
+  function saveToLocalStorage(storageName: string, storageValue: any) {
+    if (typeof window !== 'undefined') {//якщо це сторона КЛІЄНТА
+      console.log('SAVE to ' + storageName + ' STORAGE = ' + storageValue?.length);
+      localStorage.setItem(storageName, JSON.stringify(storageValue));
+    } else {
+      console.log('NOT SAVE ' + storageName + ' STORAGE');
+    }
+  }
+
+  function readFromLocalStorage(storageName: string) {
+    if (typeof window == 'undefined') {
+      console.log('NOT READ ' + storageName + ' STORAGE');
+      return [];
+    } else {
+
+      let xxx: any = localStorage.getItem(storageName);
+
+      if (typeof xxx === 'string') {
+        let rez: any = JSON.parse(xxx);
+        console.log('READ ' + storageName + ' STORAGE =' + rez?.length);
+        return rez;
+
+      } else {
+        return [];
+      }
+
+    }
+  }
+
+  function useFormInput(defVal: string, selfVal: string) {
+    let self1: string = selfVal;
     const [value, setValue] = useState(defVal);
     function handleChange(e: any) {
       setValue(e.target.value);
+      // localStorage.getItem('qwerty')
+      //localStorage.setItem(self, value);
     }
     return {
       value,
       onChange: handleChange,
-      setValue //запишемо в зовнішню змінну щоб потім викликати якщо потрібно
+      onExt: setValue //запишемо в зовнішню змінну щоб потім викликати якщо потрібно
     };
   }
 
@@ -45,8 +84,8 @@ const Users: NextPage = () => {
   }
 
   function setEdit(name: string, surname: string, id: number) {
-    namez.setValue(name);
-    surnamez.setValue(surname);
+    namez.onExt(name);
+    surnamez.onExt(surname);
     setUserEditMode(id);
   }
 
@@ -70,9 +109,6 @@ const Users: NextPage = () => {
 
   function userAdd() {
     function filterArr(p: any, idx: any, arr: any): boolean {
-
-      //const rez: boolean = (p.id !== idz);
-      //if (idz > idx) { p.id = idx + 1 } else { p.id = idx }
       if (userEditMode === idx + 1) {
         p.text1 = namez.value;
         p.text2 = surnamez.value;
@@ -89,7 +125,10 @@ const Users: NextPage = () => {
       //let z = users.push({ name: namez.value, surname: surnamez.value });
       //console.log('userAdd: name=' + namez.value + ', surname=' + surnamez.value + ', len=' + z);
     }
+    saveToLocalStorage(zUserList, userz);
+
   }
+
 
 
 
