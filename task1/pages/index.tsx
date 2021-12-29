@@ -26,14 +26,15 @@ const Users: NextPage = () => {
 
   //let users: Array<{ name: string, surname: string }> = [];// { name: string, surname: string };
   useEffect(() => {
-    /*if (typeof window !== 'undefined') {
-      const handle1 = () => { saveToLocalStorage(zUserList, userz); }
-      window.addEventListener('repaint', handle1);
+    if (typeof window !== 'undefined') {
+      /*const handle1 = () => { saveToLocalStorage(zUserList, userz); }
+      window.addEventListener('invalid', handle1);
       return () => {
         window.removeEventListener;
-      }
-    }*/
-    saveToLocalStorage(zUserList, userz);//нада тількі налаштуватись на правильну подію в коді вище, незнаю точно на яку
+      }*/
+      saveToLocalStorage(zUserList, userz);//нада тількі налаштуватись на правильну подію в коді вище, незнаю точно на яку
+    }
+
   });
 
 
