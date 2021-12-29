@@ -4,7 +4,7 @@ import styles from '../styles/Homde.module.css'
 
 
 
-function UserRec(x1: { id: string; text1: string, text2: string, href: string, userDel: any, userEdit: any }) {
+function UserRec(x1: { id: string; text1: string, text2: string, userDel: any, userEdit: any }) {
     return (
         <div className="post">
             <div className="post__content">

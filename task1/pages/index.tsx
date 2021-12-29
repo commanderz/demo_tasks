@@ -6,6 +6,12 @@ import styles from '../styles/Home.module.css'
 import UserRec from '../components/UserRec'
 import { AsyncLocalStorage } from 'async_hooks'
 
+interface Users {
+  key: string;
+  id: number;
+  text1: string;
+  text2: string;
+}
 
 const Users: NextPage = () => {
 
@@ -13,10 +19,10 @@ const Users: NextPage = () => {
   const namez = useFormInput('', 'name');
   const surnamez = useFormInput('', 'surname');
   //const xxx: string = (localStorage.getItem('test1') null ? '' : localStorage.getItem('test1'));
-  const startVal: any = readFromLocalStorage(zUserList);
-  const [userz, setUserz] = useState(
+  const startVal: Users = readFromLocalStorage(zUserList);
+  const [userz, setUserz] = useState<Users>(
     startVal
-    //{key:'123', id: "1", text1: "", text2: "", href: "#" } //вилучаємо для продакшина, потрібна лише для розробки
+    //{key:'123', id: "1", text1: "", text2: "" } //вилучаємо для продакшина, потрібна лише для розробки
     //localStorage.getItem('qwerty')
     //JSON.parse(xxx)
   );
@@ -131,7 +137,7 @@ const Users: NextPage = () => {
       setUserz(userz.filter(filterArr));
       setEdit('', '', -1);//empty edit
     } else {
-      setUserz([...userz, { key: userz.length.toString() + '.' + Date.now().toString(), id: userz.length + 1, text1: namez.value, text2: surnamez.value, href: '#' }]);
+      setUserz([...userz, { key: userz.length.toString() + '.' + Date.now().toString(), id: userz.length + 1, text1: namez.value, text2: surnamez.value }]);
       //let z = users.push({ name: namez.value, surname: surnamez.value });
       //console.log('userAdd: name=' + namez.value + ', surname=' + surnamez.value + ', len=' + z);
     }
@@ -166,7 +172,7 @@ const Users: NextPage = () => {
 
         <div className={styles.main2} >
           {userz.map(itemz =>
-            <UserRec key={itemz.key} id={itemz.id} text1={itemz.text1} text2={itemz.text2} href='#' userDel={userDel} userEdit={userEdit}></UserRec>
+            <UserRec key={itemz.key} id={itemz.id} text1={itemz.text1} text2={itemz.text2} userDel={userDel} userEdit={userEdit}></UserRec>
           )}
 
         </div>
