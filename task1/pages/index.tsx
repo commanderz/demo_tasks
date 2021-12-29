@@ -25,6 +25,17 @@ const Users: NextPage = () => {
   );
 
   //let users: Array<{ name: string, surname: string }> = [];// { name: string, surname: string };
+  useEffect(() => {
+    /*if (typeof window !== 'undefined') {
+      const handle1 = () => { saveToLocalStorage(zUserList, userz); }
+      window.addEventListener('repaint', handle1);
+      return () => {
+        window.removeEventListener;
+      }
+    }*/
+    saveToLocalStorage(zUserList, userz);//нада тількі налаштуватись на правильну подію в коді вище, незнаю точно на яку
+  });
+
 
   function saveToLocalStorage(storageName: string, storageValue: any) {
     if (typeof window !== 'undefined') {//якщо це сторона КЛІЄНТА
@@ -125,7 +136,7 @@ const Users: NextPage = () => {
       //let z = users.push({ name: namez.value, surname: surnamez.value });
       //console.log('userAdd: name=' + namez.value + ', surname=' + surnamez.value + ', len=' + z);
     }
-    saveToLocalStorage(zUserList, userz);
+    //saveToLocalStorage(zUserList, userz);
 
   }
 
