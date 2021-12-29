@@ -27,12 +27,12 @@ const Users: NextPage = () => {
   //let users: Array<{ name: string, surname: string }> = [];// { name: string, surname: string };
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      /*const handle1 = () => { saveToLocalStorage(zUserList, userz); }
-      window.addEventListener('invalid', handle1);
+      const handle1 = () => { saveToLocalStorage(zUserList, userz); }
+      window.addEventListener('unload', handle1); //остальні події https://www.w3schools.com/jsref/dom_obj_event.asp
       return () => {
         window.removeEventListener;
-      }*/
-      saveToLocalStorage(zUserList, userz);//нада тількі налаштуватись на правильну подію в коді вище, незнаю точно на яку
+      }
+      //saveToLocalStorage(zUserList, userz);//нада тількі налаштуватись на правильну подію в коді вище, незнаю точно на яку
     }
 
   });
@@ -52,7 +52,6 @@ const Users: NextPage = () => {
       //console.log('NOT READ ' + storageName + ' STORAGE');
       return [];
     } else {
-
       let xxx: any = localStorage.getItem(storageName);
 
       if (typeof xxx === 'string') {
@@ -63,7 +62,6 @@ const Users: NextPage = () => {
       } else {
         return [];
       }
-
     }
   }
 
@@ -78,10 +76,15 @@ const Users: NextPage = () => {
     return {
       value,
       onChange: handleChange,
-      onExt: setValue //запишемо в зовнішню змінну щоб потім викликати якщо потрібно
+      onsetvalue: setValue //запишемо в зовнішню змінну щоб потім викликати якщо потрібно
     };
   }
 
+  function setEdit(name: string, surname: string, id: number) {
+    namez.onsetvalue(name);
+    surnamez.onsetvalue(surname);
+    setUserEditMode(id);
+  }
 
   function userDel(idz: string) {
     function filterArr(p: any, idx: any, arr: any): boolean {
@@ -89,17 +92,12 @@ const Users: NextPage = () => {
       if (idz > idx) { p.id = idx + 1 } else { p.id = idx }
       if ((!rez) && (userEditMode === idx + 1)) { setEdit('', '', -1); }//якщо видалили редагуємий елемент
       return rez;
-
     }
     //setUserz(userz.filter(p => p.id !== idz))//work ok
     setUserz(userz.filter(filterArr));
   }
 
-  function setEdit(name: string, surname: string, id: number) {
-    namez.onExt(name);
-    surnamez.onExt(surname);
-    setUserEditMode(id);
-  }
+
 
   function userEdit(idz: string) {
     function filterArr(p: any, idx: any, arr: any): boolean {
@@ -141,9 +139,6 @@ const Users: NextPage = () => {
 
   }
 
-
-
-
   //useEffect(() => {    console.log(users)  })
 
   return (
@@ -157,10 +152,10 @@ const Users: NextPage = () => {
       <main className={styles.main}>
         <div className={styles.grid}>
           <div className={styles.card}>
-            <p className={styles.description}>{`Ім'я`} <br /><input {...namez} /></p>
+            <p className={styles.description}><label htmlFor={`fname`}>{`Ім'я`}</label> <br /><input type={'text'} id={`fname`} name={`fname`} {...namez} /></p>
           </div>
           <div className={styles.card}>
-            <p className={styles.description}> {`Прізвище`}<br /> <input {...surnamez} /></p>
+            <p className={styles.description}><label htmlFor={'lname'}> {`Прізвище`}</label><br /> <input type={'text'} id={'lname'} name={'lname'} {...surnamez} /></p>
           </div>
           <div className={styles.card}>
 
