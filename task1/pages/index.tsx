@@ -12,8 +12,10 @@ const Users: NextPage = () => {
   const surnamez = useFormInput('');
   const [userz, setUserz] = useState([
     //{key:'123', id: "1", text1: "", text2: "", href: "#" } //вилучаємо для продакшина, потрібна лише для розробки
-
   ]);
+  const [userEditMode, setUserEditMode] = useState(-1
+    //{key: id: text1 text2}
+  );
 
   //let users: Array<{ name: string, surname: string }> = [];// { name: string, surname: string };
 
@@ -24,7 +26,8 @@ const Users: NextPage = () => {
     }
     return {
       value,
-      onChange: handleChange
+      onChange: handleChange,
+      setValue //запишемо в зовнішню змінну щоб потім викликати якщо потрібно
     };
   }
 
@@ -39,14 +42,51 @@ const Users: NextPage = () => {
     setUserz(userz.filter(filterArr));
   }
 
-  function userEdit() {
-
+  function setEdit(name: string, surname: string, id: number) {
+    namez.setValue(name);
+    surnamez.setValue(surname);
+    setUserEditMode(id);
   }
 
+  function userEdit(idz: string) {
+    function filterArr(p: any, idx: any, arr: any): boolean {
+      //const rez: boolean = (p.id !== idz);
+      if (idz == idx + 1) {
+        setEdit(p.text1, p.text2, p.id);
+      }
+      return true;
+    }
+
+    if (userEditMode >= 0) {
+      //дія з попереднім редагуємим: не потрібно нічого робити, просто відміняємо
+    }
+
+    userz.filter(filterArr);
+  }
+
+
+
   function userAdd() {
-    setUserz([...userz, { key: userz.length.toString() + '.' + Date.now().toString(), id: userz.length + 1, text1: namez.value, text2: surnamez.value, href: '#' }]);
-    //let z = users.push({ name: namez.value, surname: surnamez.value });
-    //console.log('userAdd: name=' + namez.value + ', surname=' + surnamez.value + ', len=' + z);
+    function filterArr(p: any, idx: any, arr: any): boolean {
+
+      //const rez: boolean = (p.id !== idz);
+      //if (idz > idx) { p.id = idx + 1 } else { p.id = idx }
+      if (userEditMode === idx + 1) {
+        p.text1 = namez.value;
+        p.text2 = surnamez.value;
+      }
+      return true;
+    }
+
+    if (userEditMode >= 0) {
+      //дія з  редагуємим 
+      setUserz(userz.filter(filterArr));
+      setEdit('', '', -1);//empty edit
+    } else {
+      setUserz([...userz, { key: userz.length.toString() + '.' + Date.now().toString(), id: userz.length + 1, text1: namez.value, text2: surnamez.value, href: '#' }]);
+      //let z = users.push({ name: namez.value, surname: surnamez.value });
+      //console.log('userAdd: name=' + namez.value + ', surname=' + surnamez.value + ', len=' + z);
+    }
   }
 
 
@@ -71,7 +111,7 @@ const Users: NextPage = () => {
           </div>
           <div className={styles.card}>
 
-            <p className={styles.description}><button onClick={userAdd}>Зберегти</button> </p>
+            <p className={styles.description}><button onClick={userAdd}>{userEditMode == -1 ? 'Додати' : 'Зберегти'}</button> </p>
           </div>
         </div>
 
