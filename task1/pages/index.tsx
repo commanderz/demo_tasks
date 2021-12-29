@@ -18,14 +18,10 @@ const Users: NextPage = () => {
   const zUserList: string = 'UserList';//назва в LocalStorage для списку користувачів
   const namez = useFormInput('', 'name');
   const surnamez = useFormInput('', 'surname');
-  //const xxx: string = (localStorage.getItem('test1') null ? '' : localStorage.getItem('test1'));
   const startVal: UsersType[] = readFromLocalStorage(zUserList);
   const [userz, setUserz] = useState<UsersType[]>(startVal);
-  const [userEditMode, setUserEditMode] = useState(-1
-    //{key: id: text1 text2}
-  );
+  const [userEditMode, setUserEditMode] = useState(-1);
 
-  //let users: Array<{ name: string, surname: string }> = [];// { name: string, surname: string };
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const handle1 = () => { saveToLocalStorage(zUserList, userz); }
@@ -43,16 +39,13 @@ const Users: NextPage = () => {
     if (typeof window !== 'undefined') {//якщо це сторона КЛІЄНТА
       console.log('SAVE to ' + storageName + ' STORAGE = ' + storageValue?.length);
       localStorage.setItem(storageName, JSON.stringify(storageValue));
-    } else {
-      //console.log('NOT SAVE ' + storageName + ' STORAGE');
     }
   }
 
   function readFromLocalStorage(storageName: string) {
-    if (typeof window == 'undefined') {
-      //console.log('NOT READ ' + storageName + ' STORAGE');
+    if (typeof window == 'undefined') {//сторона сервака
       return [];
-    } else {
+    } else {//сторона клієнта
       let xxx: string | null = localStorage.getItem(storageName);
 
       if (typeof xxx === 'string') {
@@ -71,8 +64,6 @@ const Users: NextPage = () => {
     const [value, setValue] = useState(defVal);
     function handleChange(e: any) {
       setValue(e?.target?.value);
-      // localStorage.getItem('qwerty')
-      //localStorage.setItem(self, value);
     }
     return {
       value,
@@ -133,14 +124,8 @@ const Users: NextPage = () => {
       setEdit('', '', -1);//empty edit
     } else {
       setUserz([...userz, { key: userz.length.toString() + '.' + Date.now().toString(), id: userz.length + 1, text1: namez.value, text2: surnamez.value }]);
-      //let z = users.push({name: namez.value, surname: surnamez.value });
-      //console.log('userAdd: name=' + namez.value + ', surname=' + surnamez.value + ', len=' + z);
     }
-    //saveToLocalStorage(zUserList, userz);
-
   }
-
-  //useEffect(() => {console.log(users)})
 
   return (
     <div className={styles.container}>
