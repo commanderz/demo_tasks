@@ -36,7 +36,9 @@ const Users: NextPage = () => {
     function filterArr(p: any, idx: any, arr: any): boolean {
       const rez: boolean = (p.id !== idz);
       if (idz > idx) { p.id = idx + 1 } else { p.id = idx }
+      if ((!rez) && (userEditMode === idx + 1)) { setEdit('', '', -1); }//якщо видалили редагуємий елемент
       return rez;
+
     }
     //setUserz(userz.filter(p => p.id !== idz))//work ok
     setUserz(userz.filter(filterArr));
