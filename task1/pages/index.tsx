@@ -43,13 +43,13 @@ const Users: NextPage = () => {
       console.log('SAVE to ' + storageName + ' STORAGE = ' + storageValue?.length);
       localStorage.setItem(storageName, JSON.stringify(storageValue));
     } else {
-      console.log('NOT SAVE ' + storageName + ' STORAGE');
+      //console.log('NOT SAVE ' + storageName + ' STORAGE');
     }
   }
 
   function readFromLocalStorage(storageName: string) {
     if (typeof window == 'undefined') {
-      console.log('NOT READ ' + storageName + ' STORAGE');
+      //console.log('NOT READ ' + storageName + ' STORAGE');
       return [];
     } else {
 
