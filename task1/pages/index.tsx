@@ -28,8 +28,15 @@ const Users: NextPage = () => {
     };
   }
 
+
   function userDel(idz: string) {
-    setUserz(userz.filter(p => p.id !== idz))
+    function filterArr(p: any, idx: any, arr: any): boolean {
+      const rez: boolean = (p.id !== idz);
+      if (idz > idx) { p.id = idx + 1 } else { p.id = idx }
+      return rez;
+    }
+    //setUserz(userz.filter(p => p.id !== idz))//work ok
+    setUserz(userz.filter(filterArr));
   }
 
   function userEdit() {
