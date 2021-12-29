@@ -6,7 +6,7 @@ import styles from '../styles/Home.module.css'
 import UserRec from '../components/UserRec'
 import { AsyncLocalStorage } from 'async_hooks'
 
-interface Users {
+interface UsersType {
   key: string;
   id: number;
   text1: string;
@@ -19,13 +19,8 @@ const Users: NextPage = () => {
   const namez = useFormInput('', 'name');
   const surnamez = useFormInput('', 'surname');
   //const xxx: string = (localStorage.getItem('test1') null ? '' : localStorage.getItem('test1'));
-  const startVal: Users = readFromLocalStorage(zUserList);
-  const [userz, setUserz] = useState<Users>(
-    startVal
-    //{key:'123', id: "1", text1: "", text2: "" } //вилучаємо для продакшина, потрібна лише для розробки
-    //localStorage.getItem('qwerty')
-    //JSON.parse(xxx)
-  );
+  const startVal: UsersType[] = readFromLocalStorage(zUserList);
+  const [userz, setUserz] = useState<UsersType[]>(startVal);
   const [userEditMode, setUserEditMode] = useState(-1
     //{key: id: text1 text2}
   );
@@ -58,10 +53,10 @@ const Users: NextPage = () => {
       //console.log('NOT READ ' + storageName + ' STORAGE');
       return [];
     } else {
-      let xxx: any = localStorage.getItem(storageName);
+      let xxx: string | null = localStorage.getItem(storageName);
 
       if (typeof xxx === 'string') {
-        let rez: any = JSON.parse(xxx);
+        let rez: UsersType[] = JSON.parse(xxx);
         console.log('READ ' + storageName + ' STORAGE =' + rez?.length);
         return rez;
 
@@ -75,7 +70,7 @@ const Users: NextPage = () => {
     let self1: string = selfVal;
     const [value, setValue] = useState(defVal);
     function handleChange(e: any) {
-      setValue(e.target.value);
+      setValue(e?.target?.value);
       // localStorage.getItem('qwerty')
       //localStorage.setItem(self, value);
     }
@@ -138,14 +133,14 @@ const Users: NextPage = () => {
       setEdit('', '', -1);//empty edit
     } else {
       setUserz([...userz, { key: userz.length.toString() + '.' + Date.now().toString(), id: userz.length + 1, text1: namez.value, text2: surnamez.value }]);
-      //let z = users.push({ name: namez.value, surname: surnamez.value });
+      //let z = users.push({name: namez.value, surname: surnamez.value });
       //console.log('userAdd: name=' + namez.value + ', surname=' + surnamez.value + ', len=' + z);
     }
     //saveToLocalStorage(zUserList, userz);
 
   }
 
-  //useEffect(() => {    console.log(users)  })
+  //useEffect(() => {console.log(users)})
 
   return (
     <div className={styles.container}>
