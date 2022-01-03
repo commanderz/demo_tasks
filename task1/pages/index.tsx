@@ -18,42 +18,65 @@ const Users: NextPage = () => {
   const zUserList: string = 'UserList';//назва в LocalStorage для списку користувачів
   const namez = useFormInput('', 'name');
   const surnamez = useFormInput('', 'surname');
-  const startVal: UsersType[] = readFromLocalStorage(zUserList);
-  const [userz, setUserz] = useState<UsersType[]>(startVal);
+  const [init, setInit] = useState(false);
+  const [usersArr, setUsersArr] = useState<UsersType[]>(readUsersFromLocalStorage(zUserList));
   const [userEditMode, setUserEditMode] = useState(-1);
 
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const handle1 = () => { saveToLocalStorage(zUserList, userz); }
-      window.addEventListener('unload', handle1); //остальні події https://www.w3schools.com/jsref/dom_obj_event.asp
-      return () => {
-        window.removeEventListener;
-      }
-      //saveToLocalStorage(zUserList, userz);//нада тількі налаштуватись на правильну подію в коді вище, незнаю точно на яку
+
+
+  /*useEffect(() => {
+    const runFunc = () => {
+      setUsersArr(readUsersFromLocalStorage(zUserList));//невстигаємо тут проініціалізувати
+      console.log("runFunc 'storage' ok");
     }
+    window.addEventListener('storage', runFunc); //остальні події https://www.w3schools.com/jsref/dom_obj_event.asp
+    console.log("listener 'storage' added");
+    return () => {
+      window.removeEventListener('storage', runFunc);
+      console.log("listener 'storage' removed");
+    }
+  }, [usersArr]);*/
 
-  });
+  /*
+  useEffect(() => {
+    const runFunc = () => {
+      saveToLocalStorage(zUserList, usersArr);
+      console.log("runFunc 'unload' ok");
+    }
+    window.addEventListener('unload', runFunc); //остальні події https://www.w3schools.com/jsref/dom_obj_event.asp
+    console.log("listener 'unload' added");
 
+    return () => {
+      window.removeEventListener('unload', runFunc);
+      console.log("listener 'unload' removed");
+    }
+  }, [usersArr]);//виконається (відпишеться-і-підпишеться) тількі коли масив usersArr змінився
+*/
+
+  useEffect(() => {
+    saveToLocalStorage(zUserList, usersArr);
+  }, [usersArr]);//виконається тількі коли масив usersArr змінився
 
   function saveToLocalStorage(storageName: string, storageValue: any) {
-    if (typeof window !== 'undefined') {//якщо це сторона КЛІЄНТА
-      console.log('SAVE to ' + storageName + ' STORAGE = ' + storageValue?.length);
-      localStorage.setItem(storageName, JSON.stringify(storageValue));
-    }
+    console.log('SAVE to ' + storageName + ' STORAGE = ' + storageValue?.length);
+    localStorage.setItem(storageName, JSON.stringify(storageValue));
   }
 
-  function readFromLocalStorage(storageName: string) {
+  function readUsersFromLocalStorage(storageName: string) {
+    if (init) { return []; }
     if (typeof window == 'undefined') {//сторона сервака
+      console.log('сторона сервака');
       return [];
     } else {//сторона клієнта
-      let xxx: string | null = localStorage.getItem(storageName);
+      let storageUsersStr: string | null = localStorage.getItem(storageName);
 
-      if (typeof xxx === 'string') {
-        let rez: UsersType[] = JSON.parse(xxx);
-        console.log('READ ' + storageName + ' STORAGE =' + rez?.length);
-        return rez;
-
+      if (typeof storageUsersStr === 'string') {
+        let users: UsersType[] = JSON.parse(storageUsersStr);
+        console.log('READ ' + storageName + ' STORAGE =' + users?.length);
+        setInit(true);
+        return users;
       } else {
+        setInit(true);
         return [];
       }
     }
@@ -68,13 +91,13 @@ const Users: NextPage = () => {
     return {
       value,
       onChange: handleChange,
-      onsetvalue: setValue //запишемо в зовнішню змінну щоб потім викликати якщо потрібно
+      onSetvalue: setValue //запишемо в зовнішню змінну щоб потім викликати якщо потрібно
     };
   }
 
   function setEdit(name: string, surname: string, id: number) {
-    namez.onsetvalue(name);
-    surnamez.onsetvalue(surname);
+    namez.onSetvalue(name);
+    surnamez.onSetvalue(surname);
     setUserEditMode(id);
   }
 
@@ -85,8 +108,8 @@ const Users: NextPage = () => {
       if ((!rez) && (userEditMode === idx + 1)) { setEdit('', '', -1); }//якщо видалили редагуємий елемент
       return rez;
     }
-    //setUserz(userz.filter(p => p.id !== idz))//work ok
-    setUserz(userz.filter(filterArr));
+    //setUsersArr(usersArr.filter(p => p.id !== idz))//work ok
+    setUsersArr(usersArr.filter(filterArr));
   }
 
 
@@ -104,7 +127,7 @@ const Users: NextPage = () => {
       //дія з попереднім редагуємим: не потрібно нічого робити, просто відміняємо
     }
 
-    userz.filter(filterArr);
+    usersArr.filter(filterArr);
   }
 
 
@@ -120,10 +143,10 @@ const Users: NextPage = () => {
 
     if (userEditMode >= 0) {
       //дія з  редагуємим 
-      setUserz(userz.filter(filterArr));
+      setUsersArr(usersArr.filter(filterArr));
       setEdit('', '', -1);//empty edit
     } else {
-      setUserz([...userz, { key: userz.length.toString() + '.' + Date.now().toString(), id: userz.length + 1, text1: namez.value, text2: surnamez.value }]);
+      setUsersArr([...usersArr, { key: usersArr.length.toString() + '.' + Date.now().toString(), id: usersArr.length + 1, text1: namez.value, text2: surnamez.value }]);
     }
   }
 
@@ -136,6 +159,7 @@ const Users: NextPage = () => {
       </Head>
 
       <main className={styles.main}>
+
         <div className={styles.grid}>
           <div className={styles.card}>
             <p className={styles.description}><label htmlFor={`fname`}>{`Ім'я`}</label> <br /><input type={'text'} id={`fname`} name={`fname`} {...namez} /></p>
@@ -150,12 +174,35 @@ const Users: NextPage = () => {
         </div>
 
 
-        <div className={styles.main2} >
-          {userz.map(itemz =>
-            <UserRec key={itemz.key} id={itemz.id} text1={itemz.text1} text2={itemz.text2} userDel={userDel} userEdit={userEdit}></UserRec>
-          )}
 
-        </div>
+        {usersArr.length > 0 ?
+          <div className={styles.main2}>
+            <div className={styles.grid2}>
+              <table className={styles.table}>
+                <thead className={styles.thead}>
+                  <tr className={styles.tr}>
+                    <th className={styles.th}>{`№`}</th>
+                    <th className={styles.th}> {`Ім'я`}</th>
+                    <th className={styles.th}>{`Прізвище`}</th>
+                    <th className={styles.th}>{`Видалити`}</th>
+                    <th className={styles.th}>{`Редагувати`}</th>
+                  </tr>
+                </thead>
+                <tbody className={styles.tbody}>
+                  {usersArr.map(itemz =>
+                    <UserRec key={itemz.key} id={itemz.id} text1={itemz.text1} text2={itemz.text2} userDel={userDel} userEdit={userEdit}></UserRec>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
+          : <div className={styles.main2} >
+
+            <h1 className={styles.description} >{` Інформація відсутня`}</h1>
+
+          </div>
+        }
+
       </main >
 
       <footer className={styles.footer}>

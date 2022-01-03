@@ -18,7 +18,7 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  border: 1px solid teal;
+  border: 0px solid teal;
 }
 
 .footer {
@@ -28,6 +28,13 @@
   border-top: 1px solid #eaeaea;
   justify-content: center;
   align-items: center;
+}
+
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-grow: 1;
 }
 
 .footer a {
@@ -82,6 +89,14 @@
   max-width: 800px;
 }
 
+.grid2 {
+  display: flex;
+  align-items: center;
+  justify-content: left;
+  flex-wrap: wrap;
+  max-width: 800px;
+}
+
 .card {
   margin: 1rem;
   padding: 1.5rem;
@@ -122,4 +137,51 @@
     width: 100%;
     flex-direction: column;
   }
+  .table-box {
+    overflow-x: scroll;
+  }
+
 }
+
+
+.table {
+  border-collapse: collapse;
+  width: 100%;
+  border-bottom: 1px solid rgb(255, 0, 140);
+  border-top: 1px solid rgb(212, 2, 142);
+  display: block;
+  overflow: auto;
+  max-width: 100%;
+}
+
+.thead {
+  border-bottom: 0px solid rgb(165, 0, 137);
+}
+
+.tbody {
+  border-top: 1px solid rgb(158, 0, 124);
+}
+
+.table-box {
+  max-width: 1024px;
+}
+.table-box p {
+  font-size: larger;
+  font-weight: bold;
+}
+
+
+.th, .td {
+  padding: 8px;
+  text-align: right;
+  border-bottom: 0px solid #DDD;
+  border-left: 0px solid #ccc;
+  white-space: nowrap;
+  padding: 5px;    
+}
+.td:nth-last-child(-n+2) {
+  text-align: right;
+}
+
+.tr:hover {background-color: #D6EEEE;}
+
