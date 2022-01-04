@@ -3,151 +3,77 @@ import { useState, useEffect } from 'react'
 import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
-import UserRec from '../components/UserRec'
-import { AsyncLocalStorage } from 'async_hooks'
+import {UserRec} from '../components/UserRec'
 
-interface UsersType {
-  key: string;
+interface IUser {
   id: number;
-  text1: string;
-  text2: string;
+  name: string;
+  surname: string;
 }
 
+interface IFormData {
+  id: number | null;
+  name: string;
+  surname: string;
+}
+
+const STORAGE_KEY_USERS = 'UserList';
+const EMPTY_FORM = {id: null, name: '', surname: ''}
+
+const generateId = () => new Date().getTime();
+
 const Users: NextPage = () => {
-
-  const zUserList: string = 'UserList';//назва в LocalStorage для списку користувачів
-  const namez = useFormInput('', 'name');
-  const surnamez = useFormInput('', 'surname');
-  const [init, setInit] = useState(false);
-  const [usersArr, setUsersArr] = useState<UsersType[]>(readUsersFromLocalStorage(zUserList));
-  const [userEditMode, setUserEditMode] = useState(-1);
-
-
-
-  /*useEffect(() => {
-    const runFunc = () => {
-      setUsersArr(readUsersFromLocalStorage(zUserList));//невстигаємо тут проініціалізувати
-      console.log("runFunc 'storage' ok");
-    }
-    window.addEventListener('storage', runFunc); //остальні події https://www.w3schools.com/jsref/dom_obj_event.asp
-    console.log("listener 'storage' added");
-    return () => {
-      window.removeEventListener('storage', runFunc);
-      console.log("listener 'storage' removed");
-    }
-  }, [usersArr]);*/
-
-  /*
-  useEffect(() => {
-    const runFunc = () => {
-      saveToLocalStorage(zUserList, usersArr);
-      console.log("runFunc 'unload' ok");
-    }
-    window.addEventListener('unload', runFunc); //остальні події https://www.w3schools.com/jsref/dom_obj_event.asp
-    console.log("listener 'unload' added");
-
-    return () => {
-      window.removeEventListener('unload', runFunc);
-      console.log("listener 'unload' removed");
-    }
-  }, [usersArr]);//виконається (відпишеться-і-підпишеться) тількі коли масив usersArr змінився
-*/
+  const [formValues, setFormValues] = useState<IFormData>(EMPTY_FORM)
+  const [users, setUsers] = useState<IUser[]>([]);
 
   useEffect(() => {
-    saveToLocalStorage(zUserList, usersArr);
-  }, [usersArr]);//виконається тількі коли масив usersArr змінився
+    const usersString = localStorage.getItem(STORAGE_KEY_USERS);
+    const newUsers = usersString ? JSON.parse(usersString) : []
 
-  function saveToLocalStorage(storageName: string, storageValue: any) {
-    console.log('SAVE to ' + storageName + ' STORAGE = ' + storageValue?.length);
-    localStorage.setItem(storageName, JSON.stringify(storageValue));
+    setUsers(newUsers)
+  }, []);
+  
+  useEffect(() => {
+   syncData(users);
+  }, [users]);
+
+  const syncData = (users: IUser[]) =>  {
+    localStorage.setItem(STORAGE_KEY_USERS, JSON.stringify(users));
   }
 
-  function readUsersFromLocalStorage(storageName: string) {
-    if (init) { return []; }
-    if (typeof window == 'undefined') {//сторона сервака
-      console.log('сторона сервака');
-      return [];
-    } else {//сторона клієнта
-      let storageUsersStr: string | null = localStorage.getItem(storageName);
+  const handleFormChange = (field: string, value: string | number | null) => {
+    setFormValues({...formValues, [field]: value})
+  }
 
-      if (typeof storageUsersStr === 'string') {
-        let users: UsersType[] = JSON.parse(storageUsersStr);
-        console.log('READ ' + storageName + ' STORAGE =' + users?.length);
-        setInit(true);
-        return users;
-      } else {
-        setInit(true);
-        return [];
+  const handleDeleteClick = (id: number) => {
+    if(id === formValues.id) setFormValues(EMPTY_FORM);
+    const newUsers = users.filter(user => user.id !== id);
+    setUsers(newUsers);
+  }
+
+  const handleEditClick = (id: number) => {
+    const targetUser = users.find(user => user.id === id);
+    if(targetUser){
+      setFormValues(targetUser)
+    }
+  }
+
+  const handleSave = () => {
+    const isEdit = !!formValues.id;
+    const clonedUsers = [...users];
+
+    if(isEdit){
+      const targetUser = clonedUsers.find(user => user.id === formValues.id);
+      if(targetUser){
+        targetUser.name = formValues.name;
+        targetUser.surname = formValues.surname;
+        setUsers(clonedUsers);
       }
+    }else{
+      clonedUsers.push({id: generateId(), name: formValues.name, surname: formValues.surname})
+      setUsers(clonedUsers);
     }
-  }
-
-  function useFormInput(defVal: string, selfVal: string) {
-    let self1: string = selfVal;
-    const [value, setValue] = useState(defVal);
-    function handleChange(e: any) {
-      setValue(e?.target?.value);
-    }
-    return {
-      value,
-      onChange: handleChange,
-      onSetvalue: setValue //запишемо в зовнішню змінну щоб потім викликати якщо потрібно
-    };
-  }
-
-  function setEdit(name: string, surname: string, id: number) {
-    namez.onSetvalue(name);
-    surnamez.onSetvalue(surname);
-    setUserEditMode(id);
-  }
-
-  function userDel(idz: string) {
-    function filterArr(p: any, idx: any, arr: any): boolean {
-      const rez: boolean = (p.id !== idz);
-      if (idz > idx) { p.id = idx + 1 } else { p.id = idx }
-      if ((!rez) && (userEditMode === idx + 1)) { setEdit('', '', -1); }//якщо видалили редагуємий елемент
-      return rez;
-    }
-    //setUsersArr(usersArr.filter(p => p.id !== idz))//work ok
-    setUsersArr(usersArr.filter(filterArr));
-  }
-
-
-
-  function userEdit(idz: string) {
-    function filterArr(p: any, idx: any, arr: any): boolean {
-      //const rez: boolean = (p.id !== idz);
-      if (idz == idx + 1) {
-        setEdit(p.text1, p.text2, p.id);
-      }
-      return true;
-    }
-
-    if (userEditMode >= 0) {
-      //дія з попереднім редагуємим: не потрібно нічого робити, просто відміняємо
-    }
-
-    usersArr.filter(filterArr);
-  }
-
-
-
-  function userAdd() {
-    function filterArr(p: any, idx: any, arr: any): boolean {
-      if (userEditMode === idx + 1) {
-        p.text1 = namez.value;
-        p.text2 = surnamez.value;
-      }
-      return true;
-    }
-
-    if (userEditMode >= 0) {
-      //дія з  редагуємим 
-      setUsersArr(usersArr.filter(filterArr));
-      setEdit('', '', -1);//empty edit
-    } else {
-      setUsersArr([...usersArr, { key: usersArr.length.toString() + '.' + Date.now().toString(), id: usersArr.length + 1, text1: namez.value, text2: surnamez.value }]);
-    }
+    setFormValues(EMPTY_FORM)
   }
 
   return (
@@ -157,52 +83,43 @@ const Users: NextPage = () => {
         <meta name="description" content="Generated by create next app" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-
       <main className={styles.main}>
-
         <div className={styles.grid}>
           <div className={styles.card}>
-            <p className={styles.description}><label htmlFor={`fname`}>{`Ім'я`}</label> <br /><input type={'text'} id={`fname`} name={`fname`} {...namez} /></p>
+            <p className={styles.description}><label>{"Ім'я"}</label> <br /><input value={formValues.name} onChange={e => handleFormChange('name', e.target.value)} /></p>
           </div>
           <div className={styles.card}>
-            <p className={styles.description}><label htmlFor={'lname'}> {`Прізвище`}</label><br /> <input type={'text'} id={'lname'} name={'lname'} {...surnamez} /></p>
+            <p className={styles.description}><label>Прізвище</label><br /> <input value={formValues.surname} onChange={e => handleFormChange('surname', e.target.value)} /></p>
           </div>
           <div className={styles.card}>
-
-            <p className={styles.description}><button onClick={userAdd}>{userEditMode == -1 ? 'Додати' : 'Зберегти'}</button> </p>
+            <p className={styles.description}><button disabled={!formValues.name || !formValues.surname} onClick={handleSave}>{!formValues.id ? 'Додати' : 'Зберегти'}</button> </p>
           </div>
         </div>
 
-
-
-        {usersArr.length > 0 ?
+        {users.length > 0 ?
           <div className={styles.main2}>
             <div className={styles.grid2}>
               <table className={styles.table}>
                 <thead className={styles.thead}>
                   <tr className={styles.tr}>
-                    <th className={styles.th}>{`№`}</th>
-                    <th className={styles.th}> {`Ім'я`}</th>
-                    <th className={styles.th}>{`Прізвище`}</th>
-                    <th className={styles.th}>{`Видалити`}</th>
-                    <th className={styles.th}>{`Редагувати`}</th>
+                    <th className={styles.th}>{`Ім'я`}</th>
+                    <th className={styles.th}>Прізвище</th>
+                    <th className={styles.th}>Видалити</th>
+                    <th className={styles.th}>Редагувати</th>
                   </tr>
                 </thead>
                 <tbody className={styles.tbody}>
-                  {usersArr.map(itemz =>
-                    <UserRec key={itemz.key} id={itemz.id} text1={itemz.text1} text2={itemz.text2} userDel={userDel} userEdit={userEdit}></UserRec>
+                  {users.map(item =>
+                    <UserRec key={item.id} name={item.name} surname={item.surname} userDel={() => handleDeleteClick(item.id)} userEdit={() => handleEditClick(item.id)}></UserRec>
                   )}
                 </tbody>
               </table>
             </div>
           </div>
-          : <div className={styles.main2} >
-
-            <h1 className={styles.description} >{` Інформація відсутня`}</h1>
-
+          : <div className={styles.main2}>
+            <h1 className={styles.description}>Інформація відсутня</h1>
           </div>
         }
-
       </main >
 
       <footer className={styles.footer}>
@@ -211,7 +128,7 @@ const Users: NextPage = () => {
           target="_blank"
           rel="noopener noreferrer"
         >
-          Powered by{' '}
+          Powered by
           <span className={styles.logo}>
             <Image src="/490-crocodile.svg" alt="Crocodile Logo" width={72} height={72} />
           </span>
