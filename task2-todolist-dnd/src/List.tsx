@@ -116,12 +116,6 @@ function List() {
         width: 250
     });
 
-    /*const reorder = (list: iTaskType[], startIndex: number, endIndex: number): iTaskType[] => {
-        const result: iTaskType[] = Array.from(list);
-        const [removed] = result.splice(startIndex, 1);
-        result.splice(endIndex, 0, removed);
-        return result;
-    };*/
     function reorder2(list: iTaskType[], startIndex: number, endIndex: number): iTaskType[] {
         const result: iTaskType[] = Array.from(list);
         const [removed] = result.splice(startIndex, 1);
@@ -129,6 +123,43 @@ function List() {
         return result;
 
     };
+    function move(source: iTaskType[], destination: iTaskType[], droppableSource: DraggableLocation, droppableDestination: DraggableLocation) {
+        const sourceClone = Array.from(source);
+        const destClone = Array.from(destination);
+        const [removed] = sourceClone.splice(droppableSource.index, 1);
+
+        destClone.splice(droppableDestination.index, 0, removed);
+
+        const result: iTasks = EMPTY_TABLE;
+        if (droppableSource.droppableId === 'droppable1') {
+            result.created = sourceClone;
+
+        } else
+            if (droppableSource.droppableId === 'droppable2') {
+                result.planed = sourceClone;
+
+            } else
+                if (droppableSource.droppableId === 'droppable3') {
+                    result.finished = sourceClone;
+                }
+
+        if (droppableDestination.droppableId === 'droppable1') {
+            result.created = destClone;
+
+        } else
+            if (droppableDestination.droppableId === 'droppable2') {
+                result.planed = destClone;
+
+            } else
+                if (droppableDestination.droppableId === 'droppable3') {
+                    result.finished = destClone;
+                }
+
+
+        return result;
+    };
+
+
 
     function getList(id: string): iTaskType[] {
         if (id === 'droppable1') { return tableValues.created }
