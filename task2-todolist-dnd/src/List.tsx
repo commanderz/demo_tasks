@@ -127,8 +127,8 @@ function List() {
 
         return (
             <>
-                <Droppable droppableId="droppable" mode="standard" isDropDisabled={false} isCombineEnabled={false} direction="vertical">
-                    {provided => (
+                <Droppable droppableId={"droppable" + p.numStage} mode="standard" isDropDisabled={false} isCombineEnabled={false} direction="vertical">
+                    {(provided, snapshot) => (
                         <div ref={provided.innerRef} {...provided.droppableProps} >
                             {provided.placeholder}
                             {newlist.map((item: iTaskType, index: number) => (
