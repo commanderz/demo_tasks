@@ -68,17 +68,32 @@ function List() {
     function saveForm(formData: iTaskType) { localStorage.setItem(STORAGE_KEY_FORM, JSON.stringify(formData)); };
     function saveTable(tableData: iTaskType[]) { localStorage.setItem(STORAGE_KEY_TODOLIST, JSON.stringify(tableData)); };
 
-    /*
-      useEffect(() => {
-        syncData(users);
-      }, [users]);
-     
-      const syncData = (users: IUser[]) => {
-      localStorage.setItem(STORAGE_KEY_USERS, JSON.stringify(users));
-      console.log('SAVE to ' + STORAGE_KEY_USERS + ' STORAGE = ' + users?.length);
-    }
-      */
+    const grid: number = 8;
+    const getItemStyle = (isDragging: boolean, draggableStyle: any) => ({
+        // some basic styles to make the items look a bit nicer
+        userSelect: "none",
+        padding: grid * 2,
+        margin: `0 0 ${grid}px 0`,
 
+        // change background colour if dragging
+        background: isDragging ? "lightgreen" : "grey",
+
+        // styles we need to apply on draggables
+        ...draggableStyle
+    });
+
+    const getListStyle = (isDraggingOver: boolean) => ({
+        background: isDraggingOver ? "lightblue" : "lightgrey",
+        padding: grid,
+        width: 250
+    });
+
+    function onDragEnd(r: DropResult): void {
+        if (!r.destination) {
+            return;
+        }
+
+    }
 
     //=========================================================================================================================
     const Table = (p: any): JSX.Element => { //{ numStage: number }
@@ -98,29 +113,51 @@ function List() {
         });
 
         //console.log('new=' + newlist.length);
+        //=========================================================================================================
 
         return (
-            <div>
-                {newlist.map(item =>
-                    <h1>{item.taskName} </h1>
-                )
-                }
-            </div>
+            <>
+                <Droppable droppableId="droppable" mode="standard" isDropDisabled={false} isCombineEnabled={false} direction="vertical">
+
+                    {newlist.map((item: iTaskType, index: number) => (
+                        <Draggable key={item.id} draggableId={item.id} index={index}>
+                            {(provided, snapshot) => (
+                                <div
+                                    ref={provided.innerRef}
+                                    {...provided.draggableProps}
+                                    {...provided.dragHandleProps}
+                                    style={getItemStyle(
+                                        snapshot.isDragging,
+                                        provided.draggableProps.style
+                                    )}
+                                >
+                                    {item.content}
+                                </div>
+                            )}
+                        </Draggable>
+                    ))}
+
+                </Droppable>
+            </>
         )
     }
     //=====================================================================================================================================
 
     return (
         <div className="parent">
+
             <div className="div1"> <label>{"Назва задачі"}</label> <input value={formValues.taskName} onChange={e => handleFormChange('taskName', e.target.value)} ></input>
                 <button disabled={!formValues.taskName} onClick={handleAddTodo}>{"Створити задачу"}</button>
             </div>
-            <div className="div2"> <Table numStage={1} />
-            </div>
-            <div className="div3"> <Table numStage={2} />
-            </div>
-            <div className="div4"> <Table numStage={3} />
-            </div>
+            <DragDropContext onDragEnd={onDragEnd}   >
+
+                <div className="div2"> <Table numStage={1} />
+                </div>
+                <div className="div3"> <Table numStage={2} />
+                </div>
+                <div className="div4"> <Table numStage={3} />
+                </div>
+            </DragDropContext>
         </div >
     );
 
