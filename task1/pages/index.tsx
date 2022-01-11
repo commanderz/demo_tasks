@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react'
 import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
-import {UserRec} from '../components/UserRec'
+import { UserRec } from '../components/UserRec'
 
 interface IUser {
   id: number;
@@ -18,7 +18,7 @@ interface IFormData {
 }
 
 const STORAGE_KEY_USERS = 'UserList';
-const EMPTY_FORM = {id: null, name: '', surname: ''}
+const EMPTY_FORM = { id: null, name: '', surname: '' }
 
 const generateId = () => new Date().getTime();
 
@@ -31,29 +31,32 @@ const Users: NextPage = () => {
     const newUsers = usersString ? JSON.parse(usersString) : []
 
     setUsers(newUsers)
+    console.log('READ ' + STORAGE_KEY_USERS + ' STORAGE =' + newUsers?.length);
   }, []);
-  
+
   useEffect(() => {
-   syncData(users);
+    syncData(users);
   }, [users]);
 
-  const syncData = (users: IUser[]) =>  {
+  const syncData = (users: IUser[]) => {
     localStorage.setItem(STORAGE_KEY_USERS, JSON.stringify(users));
+    console.log('SAVE to ' + STORAGE_KEY_USERS + ' STORAGE = ' + users?.length);
   }
 
   const handleFormChange = (field: string, value: string | number | null) => {
-    setFormValues({...formValues, [field]: value})
+    console.log('fv='+formValues.id);
+    setFormValues({ ...formValues, [field]: value })
   }
 
   const handleDeleteClick = (id: number) => {
-    if(id === formValues.id) setFormValues(EMPTY_FORM);
+    if (id === formValues.id) setFormValues(EMPTY_FORM);
     const newUsers = users.filter(user => user.id !== id);
     setUsers(newUsers);
   }
 
   const handleEditClick = (id: number) => {
     const targetUser = users.find(user => user.id === id);
-    if(targetUser){
+    if (targetUser) {
       setFormValues(targetUser)
     }
   }
@@ -62,15 +65,15 @@ const Users: NextPage = () => {
     const isEdit = !!formValues.id;
     const clonedUsers = [...users];
 
-    if(isEdit){
+    if (isEdit) {
       const targetUser = clonedUsers.find(user => user.id === formValues.id);
-      if(targetUser){
+      if (targetUser) {
         targetUser.name = formValues.name;
         targetUser.surname = formValues.surname;
         setUsers(clonedUsers);
       }
-    }else{
-      clonedUsers.push({id: generateId(), name: formValues.name, surname: formValues.surname})
+    } else {
+      clonedUsers.push({ id: generateId(), name: formValues.name, surname: formValues.surname })
       setUsers(clonedUsers);
     }
     setFormValues(EMPTY_FORM)
