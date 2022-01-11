@@ -98,11 +98,43 @@ function List() {
         width: 250
     });
 
+    const reorder = (list: iTaskType[], startIndex: number, endIndex: number): iTaskType[] => {
+        const result: iTaskType[] = Array.from(list);
+        const [removed] = result.splice(startIndex, 1);
+        result.splice(endIndex, 0, removed);
+        return result;
+    };
+
     function onDragEnd(r: DropResult): void {
         if (!r.destination) {
             return;
         }
+        if ((r.destination.index === r.source.index) && (r.destination.droppableId === r.source.droppableId)) {
+            //console.log('do nothing');
+            return;
+        }
+        if (r.destination.droppableId === r.source.droppableId) {
+            console.log('move src = ' + r.source.droppableId + ', idx=' + r.source.index);
+            console.log('move dest = ' + r.destination.droppableId + ', idx=' + r.destination.index);
+            /*const quote = reorder(
+                //state.quotes,
+                getList(r.source.droppableId),
+                r.source.index,
+                r.destination.index
+            );
+            console.log(quote);*/
+            /*if (r.source.droppableId === 'droppable') {
+                setState({ quotes: quote, selected: state.selected });
+            } else
+                if (r.source.droppableId === 'droppable2') {
+                    setState({ quotes: state.quotes, selected: quote });
+                }
+                */
+        } else {
+            console.log('move2 src = ' + r.source.droppableId + ', idx=' + r.source.index);
+            console.log('move2 dest = ' + r.destination.droppableId + ', idx=' + r.destination.index);
 
+        }
     }
 
     //=========================================================================================================================
