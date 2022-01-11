@@ -22,8 +22,14 @@ interface iInputData {
     onChange: any;
     onSetValue: React.Dispatch<SetStateAction<string>>;
 };
-
+const grid: number = 8;
 const QuoteItem: StyledComponent<any, any, any> = styled.div`
+  width: 200px;
+  height: 50px;
+  border: 1px solid grey;
+  margin-bottom: ${grid}px;
+  padding: ${grid}px;
+  background-color:  lightblue;
   `;
 
 
@@ -54,7 +60,7 @@ function List() {
         //console.log('fv=' + formValues.id+', eventChange=' + value);
     }
 
-    /*useEffect(() => {
+    useEffect(() => {
         const formString: string | null = localStorage.getItem(STORAGE_KEY_FORM);
         const newForm: iTaskType = formString ? JSON.parse(formString) : EMPTY_FORM;
         setFormValues(newForm);
@@ -63,16 +69,16 @@ function List() {
         const newTable: iTaskType[] = tableString ? JSON.parse(tableString) : [];
         setTableValues(newTable);
         //console.log('READ ' + STORAGE_KEY_USERS + ' STORAGE =' + newUsers?.length);
-    }, []);*/
+    }, []);
 
 
 
-    //useEffect(() => { saveForm(formValues); }, [formValues]);
-    //useEffect(() => { saveTable(tableValues); }, [tableValues]);
+    useEffect(() => { saveForm(formValues); }, [formValues]);
+    useEffect(() => { saveTable(tableValues); }, [tableValues]);
     function saveForm(formData: iTaskType) { localStorage.setItem(STORAGE_KEY_FORM, JSON.stringify(formData)); };
     function saveTable(tableData: iTaskType[]) { localStorage.setItem(STORAGE_KEY_TODOLIST, JSON.stringify(tableData)); };
 
-    const grid: number = 8;
+
     const getItemStyle = (isDragging: boolean, draggableStyle: DraggingStyle | NotDraggingStyle | undefined) => ({
         // some basic styles to make the items look a bit nicer
         userSelect: "none",
@@ -120,13 +126,13 @@ function List() {
         //=========================================================================================================
 
         return (
-            <><DragDropContext onDragEnd={onDragEnd}   >
+            <>
                 <Droppable droppableId="droppable" mode="standard" isDropDisabled={false} isCombineEnabled={false} direction="vertical">
                     {provided => (
                         <div ref={provided.innerRef} {...provided.droppableProps} >
                             {provided.placeholder}
                             {newlist.map((item: iTaskType, index: number) => (
-                                <Draggable draggableId={item.id} index={index}>
+                                <Draggable draggableId={item.id} index={index} key={item.id}>
                                     {(provided, snapshot) => (
                                         <QuoteItem className="card"
                                             ref={provided.innerRef}
@@ -145,26 +151,24 @@ function List() {
                         </div>
                     )}
                 </Droppable>
-            </DragDropContext>
             </>
         );
     };
     //=====================================================================================================================================
 
     return (
-        <div className="parent">
+        <div >
 
-            <div className="div1"> <label>{"Назва задачі"}</label> <input value={formValues.taskName} onChange={e => handleFormChange('taskName', e.target.value)} ></input>
+            <div > <label>{"Назва задачі"}</label> <input value={formValues.taskName} onChange={e => handleFormChange('taskName', e.target.value)} ></input>
                 <button disabled={!formValues.taskName} onClick={handleAddTodo}>{"Створити задачу"}</button>
             </div>
+            <DragDropContext onDragEnd={onDragEnd}   >
+                <Table numStage={1} />
 
+                <Table numStage={2} />
 
-            <Table className="div2" numStage={1} />
-
-            <Table className="div3" numStage={2} />
-
-            <Table className="div4" numStage={3} />
-
+                <Table numStage={3} />
+            </DragDropContext>
 
         </div >
     );
