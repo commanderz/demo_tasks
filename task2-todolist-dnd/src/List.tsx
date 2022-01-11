@@ -127,11 +127,15 @@ function List() {
                             {provided.placeholder}
                             {newlist.map((item: iTaskType, index: number) => (
                                 <Draggable draggableId={item.id} index={index}>
-                                    {(provided) => (
+                                    {(provided, snapshot) => (
                                         <QuoteItem className="card"
                                             ref={provided.innerRef}
                                             {...provided.draggableProps}
                                             {...provided.dragHandleProps}
+                                            style={getItemStyle(
+                                                snapshot.isDragging,
+                                                provided.draggableProps.style
+                                            )}
                                         >
                                             {item.taskName}
                                         </QuoteItem>
