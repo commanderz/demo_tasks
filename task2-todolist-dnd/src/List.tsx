@@ -23,6 +23,10 @@ interface iInputData {
     onSetValue: React.Dispatch<SetStateAction<string>>;
 };
 
+const QuoteItem: StyledComponent<any, any, any> = styled.div`
+  `;
+
+
 const STORAGE_KEY_TODOLIST: string = 'TodoList';
 const STORAGE_KEY_FORM: string = 'TodoForm';
 const EMPTY_FORM: iTaskType = { key: '', id: null, taskName: '', taskType: '', taskStage: null };
@@ -96,7 +100,7 @@ function List() {
     }
 
     //=========================================================================================================================
-    const Table = (p: any): JSX.Element => { //{ numStage: number }
+    function Table(p: any): JSX.Element { //{ numStage: number }
         //const len = tableValues.length - 1;
         //console.log('numStage=' + p.numStage + ', cnt=' + len + ', name=' + todolist[len]?.taskName + ', type=' + todolist[len]?.taskType + ', stage=' + todolist[len]?.taskStage);
         let tableStage: eTaskStage | null = null;
@@ -116,7 +120,7 @@ function List() {
         //=========================================================================================================
 
         return (
-            <>
+            <><DragDropContext onDragEnd={onDragEnd}   >
                 <Droppable droppableId="droppable" mode="standard" isDropDisabled={false} isCombineEnabled={false} direction="vertical">
 
                     {newlist.map((item: iTaskType, index: number) => (
@@ -131,16 +135,17 @@ function List() {
                                         provided.draggableProps.style
                                     )}
                                 >
-                                    {item.content}
+                                    {item.taskName}
                                 </div>
-                            )}
+                            )};
                         </Draggable>
-                    ))}
+                    ))};
 
                 </Droppable>
+            </DragDropContext>
             </>
-        )
-    }
+        );
+    };
     //=====================================================================================================================================
 
     return (
@@ -149,15 +154,15 @@ function List() {
             <div className="div1"> <label>{"Назва задачі"}</label> <input value={formValues.taskName} onChange={e => handleFormChange('taskName', e.target.value)} ></input>
                 <button disabled={!formValues.taskName} onClick={handleAddTodo}>{"Створити задачу"}</button>
             </div>
-            <DragDropContext onDragEnd={onDragEnd}   >
 
-                <div className="div2"> <Table numStage={1} />
-                </div>
-                <div className="div3"> <Table numStage={2} />
-                </div>
-                <div className="div4"> <Table numStage={3} />
-                </div>
-            </DragDropContext>
+
+            <div className="div2"> <Table numStage={1} />
+            </div>
+            <div className="div3"> <Table numStage={2} />
+            </div>
+            <div className="div4"> <Table numStage={3} />
+            </div>
+
         </div >
     );
 
