@@ -126,23 +126,18 @@ function List() {
                         <div ref={provided.innerRef} {...provided.droppableProps} >
                             {provided.placeholder}
                             {newlist.map((item: iTaskType, index: number) => (
-                                <Draggable key={item.id} draggableId={item.id} index={index}>
-                                    {(provided, snapshot) => (
-                                        <div
+                                <Draggable draggableId={item.id} index={index}>
+                                    {(provided) => (
+                                        <QuoteItem className="card"
                                             ref={provided.innerRef}
                                             {...provided.draggableProps}
                                             {...provided.dragHandleProps}
-                                            style={
-                                                getItemStyle(
-                                                    snapshot.isDragging,
-                                                    provided.draggableProps.style
-                                                )}
                                         >
                                             {item.taskName}
-                                        </div>
-                                    )};
+                                        </QuoteItem>
+                                    )}
                                 </Draggable>
-                            ))};
+                            ))}
                         </div>
                     )}
                 </Droppable>
@@ -160,12 +155,12 @@ function List() {
             </div>
 
 
-            <div className="div2"> <Table numStage={1} />
-            </div>
-            <div className="div3"> <Table numStage={2} />
-            </div>
-            <div className="div4"> <Table numStage={3} />
-            </div>
+            <Table className="div2" numStage={1} />
+
+            <Table className="div3" numStage={2} />
+
+            <Table className="div4" numStage={3} />
+
 
         </div >
     );
