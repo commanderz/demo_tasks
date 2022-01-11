@@ -1,7 +1,7 @@
 import './App.css';
 import React, { useEffect, ReactDOM, useState, SetStateAction } from 'react';
 import styled, { StyledComponent } from "@emotion/styled";
-import { DropResult, DragDropContext, Droppable, Draggable, ResponderProvided, resetServerContext, DroppableProvided, DraggableProvided, DraggableLocation } from "react-beautiful-dnd";
+import { DraggingStyle, NotDraggingStyle, DropResult, DragDropContext, Droppable, Draggable, ResponderProvided, resetServerContext, DroppableProvided, DraggableProvided, DraggableLocation } from "react-beautiful-dnd";
 
 enum eTaskStage {//етап виконання: Створено, Заплановано, Завершено
     tsCreated = 'tsCreated',
@@ -11,7 +11,7 @@ enum eTaskStage {//етап виконання: Створено, Заплано
 
 interface iTaskType {
     key: string;
-    id: number | null;
+    id: string;
     taskName: string;
     taskType: string;
     taskStage: eTaskStage | null;//етап виконання: Створено, Заплановано, Завершено
@@ -29,8 +29,8 @@ const QuoteItem: StyledComponent<any, any, any> = styled.div`
 
 const STORAGE_KEY_TODOLIST: string = 'TodoList';
 const STORAGE_KEY_FORM: string = 'TodoForm';
-const EMPTY_FORM: iTaskType = { key: '', id: null, taskName: '', taskType: '', taskStage: null };
-const generateId = () => new Date().getTime();
+const EMPTY_FORM: iTaskType = { key: '', id: '', taskName: '', taskType: '', taskStage: null };
+const generateId = () => new Date().getTime().toString();
 //const todolist: iTaskType[] = [];
 
 
@@ -54,7 +54,7 @@ function List() {
         //console.log('fv=' + formValues.id+', eventChange=' + value);
     }
 
-    useEffect(() => {
+    /*useEffect(() => {
         const formString: string | null = localStorage.getItem(STORAGE_KEY_FORM);
         const newForm: iTaskType = formString ? JSON.parse(formString) : EMPTY_FORM;
         setFormValues(newForm);
@@ -63,17 +63,17 @@ function List() {
         const newTable: iTaskType[] = tableString ? JSON.parse(tableString) : [];
         setTableValues(newTable);
         //console.log('READ ' + STORAGE_KEY_USERS + ' STORAGE =' + newUsers?.length);
-    }, []);
+    }, []);*/
 
 
 
-    useEffect(() => { saveForm(formValues); }, [formValues]);
-    useEffect(() => { saveTable(tableValues); }, [tableValues]);
+    //useEffect(() => { saveForm(formValues); }, [formValues]);
+    //useEffect(() => { saveTable(tableValues); }, [tableValues]);
     function saveForm(formData: iTaskType) { localStorage.setItem(STORAGE_KEY_FORM, JSON.stringify(formData)); };
     function saveTable(tableData: iTaskType[]) { localStorage.setItem(STORAGE_KEY_TODOLIST, JSON.stringify(tableData)); };
 
     const grid: number = 8;
-    const getItemStyle = (isDragging: boolean, draggableStyle: any) => ({
+    const getItemStyle = (isDragging: boolean, draggableStyle: DraggingStyle | NotDraggingStyle | undefined) => ({
         // some basic styles to make the items look a bit nicer
         userSelect: "none",
         padding: grid * 2,
@@ -122,25 +122,29 @@ function List() {
         return (
             <><DragDropContext onDragEnd={onDragEnd}   >
                 <Droppable droppableId="droppable" mode="standard" isDropDisabled={false} isCombineEnabled={false} direction="vertical">
-
-                    {newlist.map((item: iTaskType, index: number) => (
-                        <Draggable key={item.id} draggableId={item.id} index={index}>
-                            {(provided, snapshot) => (
-                                <div
-                                    ref={provided.innerRef}
-                                    {...provided.draggableProps}
-                                    {...provided.dragHandleProps}
-                                    style={getItemStyle(
-                                        snapshot.isDragging,
-                                        provided.draggableProps.style
-                                    )}
-                                >
-                                    {item.taskName}
-                                </div>
-                            )};
-                        </Draggable>
-                    ))};
-
+                    {provided => (
+                        <div ref={provided.innerRef} {...provided.droppableProps} >
+                            {provided.placeholder}
+                            {newlist.map((item: iTaskType, index: number) => (
+                                <Draggable key={item.id} draggableId={item.id} index={index}>
+                                    {(provided, snapshot) => (
+                                        <div
+                                            ref={provided.innerRef}
+                                            {...provided.draggableProps}
+                                            {...provided.dragHandleProps}
+                                            style={
+                                                getItemStyle(
+                                                    snapshot.isDragging,
+                                                    provided.draggableProps.style
+                                                )}
+                                        >
+                                            {item.taskName}
+                                        </div>
+                                    )};
+                                </Draggable>
+                            ))};
+                        </div>
+                    )}
                 </Droppable>
             </DragDropContext>
             </>
