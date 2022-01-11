@@ -40,7 +40,7 @@
 
 
 /*my================================*/
-body {
+/*body {
   min-height: 100vh;
   background: #212534;
   display: flex;
@@ -49,16 +49,78 @@ body {
   padding-top: 2rem;
   padding-bottom: 2rem;
   box-sizing: border-box;
+}*/
+
+body {
+    background-color: #fff;
+    color: #172B4D;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1.42857142857143;
+    -ms-overflow-style: -ms-autohiding-scrollbar;
+    -webkit-text-decoration-skip: ink;
+    text-decoration-skip-ink: auto;
+}
+div {
+    display: block;
+}
+.divmain1 {
+    min-height: 100vh;
+    color: rgb(9, 30, 66);
+}
+.divmain2 {
+    display: flex;
+    user-select: none;
+}
+.divsecondary123 {
+    width: 300px;
+    margin: 8px;
+    border-radius: 2px;
+    border: 1px solid rgb(122, 134, 154);
+    background-color: rgb(193, 199, 208);
+    display: flex;
+    flex-direction: column;
+}
+.div0 {
+    padding: 8px;
+    min-height: 200px;
+    -webkit-box-flex: 1;
+    flex-grow: 1;
+    transition: background-color 0.2s ease 0s;
+}
+.divitem {
+    background-color: rgb(250, 251, 252);
+    color: rgb(9, 30, 66);
+    padding: 8px;
+    margin-bottom: 8px;
+    border-radius: 2px;
+    font-size: 18px;
+    border: 3px solid rgb(137, 147, 164);
+    position: relative;
+}
+.styleh3 {
+    font-weight: bold;
+    padding: 8px;
+    justify-content: center;
 }
 
-.tables {
+
+.grid {
   display: flex;
-  user-select: none;
-  flex-direction: row;
-  align-content: stretch;
+  align-items: center;
   justify-content: center;
-  align-items: stretch;
   flex-wrap: wrap;
+  max-width: 800px;
+}
+
+.grid2 {
+  display: flex;
+  align-items: center;
+  justify-content: left;
+  flex-wrap: wrap;
+  max-width: 800px;
 }
 
 

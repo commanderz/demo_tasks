@@ -4,9 +4,9 @@ import styled, { StyledComponent } from "@emotion/styled";
 import { DraggingStyle, NotDraggingStyle, DropResult, DragDropContext, Droppable, Draggable, ResponderProvided, resetServerContext, DroppableProvided, DraggableProvided, DraggableLocation } from "react-beautiful-dnd";
 
 enum eTaskStage {//етап виконання: Створено, Заплановано, Завершено
-    tsCreated = 'tsCreated',
-    tsPlaned = 'tsPlaned',
-    tsFinished = 'tsFinished'
+    tsCreated = 'Список всіх справ',
+    tsPlaned = 'Заплановані справи',
+    tsFinished = 'Завершені справи'
 }
 
 interface iTaskType {
@@ -126,32 +126,35 @@ function List() {
         //=========================================================================================================
 
         return (
-            <>
-                <Droppable droppableId={"droppable" + p.numStage} mode="standard" isDropDisabled={false} isCombineEnabled={false} direction="vertical">
-                    {(provided, snapshot) => (
-                        <div ref={provided.innerRef} {...provided.droppableProps} >
-                            {provided.placeholder}
-                            {newlist.map((item: iTaskType, index: number) => (
-                                <Draggable draggableId={item.id} index={index} key={item.id}>
-                                    {(provided, snapshot) => (
-                                        <QuoteItem className="card"
-                                            ref={provided.innerRef}
-                                            {...provided.draggableProps}
-                                            {...provided.dragHandleProps}
-                                            style={getItemStyle(
-                                                snapshot.isDragging,
-                                                provided.draggableProps.style
-                                            )}
-                                        >
-                                            {item.taskName}
-                                        </QuoteItem>
-                                    )}
-                                </Draggable>
-                            ))}
-                        </div>
-                    )}
-                </Droppable>
-            </>
+            <div className='divsecondary123'>
+                <h3 className="styleh3">{"[" + tableStage?.toString() + "]"}</h3>
+                <div className="div0">
+                    <Droppable droppableId={"droppable" + p.numStage} mode="standard" isDropDisabled={false} isCombineEnabled={false} direction="vertical" >
+                        {(provided, snapshot) => (
+                            <div ref={provided.innerRef} {...provided.droppableProps} >
+                                {provided.placeholder}
+                                {newlist.map((item: iTaskType, index: number) => (
+                                    <Draggable draggableId={item.id} index={index} key={item.id}>
+                                        {(provided, snapshot) => (
+                                            <QuoteItem className="divitem"
+                                                ref={provided.innerRef}
+                                                {...provided.draggableProps}
+                                                {...provided.dragHandleProps}
+                                                style={getItemStyle(
+                                                    snapshot.isDragging,
+                                                    provided.draggableProps.style
+                                                )}
+                                            >
+                                                {item.taskName}
+                                            </QuoteItem>
+                                        )}
+                                    </Draggable>
+                                ))}
+                            </div>
+                        )}
+                    </Droppable>
+                </div>
+            </div>
         );
     };
     //=====================================================================================================================================
@@ -162,13 +165,18 @@ function List() {
             <div > <label>{"Назва задачі"}</label> <input value={formValues.taskName} onChange={e => handleFormChange('taskName', e.target.value)} ></input>
                 <button disabled={!formValues.taskName} onClick={handleAddTodo}>{"Створити задачу"}</button>
             </div>
+
             <DragDropContext onDragEnd={onDragEnd}   >
-                <Table numStage={1} />
+                <div className="divmain1">
+                    <div className="divmain2">
+                        <Table numStage={1} />
 
-                <Table numStage={2} />
+                        <Table numStage={2} />
 
-                <Table numStage={3} />
-            </DragDropContext>
+                        <Table numStage={3} />
+                    </div>
+                </div>
+            </DragDropContext >
 
         </div >
     );
