@@ -19,7 +19,7 @@ interface iTaskType {
     id: string;
     taskName: string;
     taskType: string;
-    taskStage: eTaskStage | null;//етап виконання: Створено, Заплановано, Завершено
+    //taskStage: eTaskStage | null;//етап виконання: Створено, Заплановано, Завершено
 }
 
 interface iTasks {
@@ -46,7 +46,7 @@ const QuoteItem: StyledComponent<any, any, any> = styled.div`
 
 const STORAGE_KEY_TODOLIST: string = 'TodoList';
 const STORAGE_KEY_FORM: string = 'TodoForm';
-const EMPTY_FORM: iTaskType = { key: '', id: '', taskName: '', taskType: '', taskStage: null };
+const EMPTY_FORM: iTaskType = { key: '', id: '', taskName: '', taskType: '' /*, taskStage: null*/ };
 const EMPTY_TABLE: iTasks = { created: [], finished: [], planed: [] };
 const generateId = () => new Date().getTime().toString();
 //const todolist: iTaskType[] = [];
@@ -68,7 +68,7 @@ function List() {
     }
 
     const handleFormChange = (field: string, value: string | number | null) => {
-        setFormValues({ ...formValues, [field]: value, id: generateId(), taskType: 'label', taskStage: eTaskStage.tsCreated })
+        setFormValues({ ...formValues, [field]: value, id: generateId(), taskType: 'label' /*, taskStage: eTaskStage.tsCreated*/ })
         //console.log('fv=' + formValues.id+', eventChange=' + value);
     }
 
@@ -124,7 +124,7 @@ function List() {
         return result;
 
     };
-    function move(source: iTaskType[], destination: iTaskType[], droppableSource: DraggableLocation, droppableDestination: DraggableLocation) {
+    function move(source: iTaskType[], destination: iTaskType[], droppableSource: DraggableLocation, droppableDestination: DraggableLocation): iTasks {
         const sourceClone = Array.from(source);
         const destClone = Array.from(destination);
         const [removed] = sourceClone.splice(droppableSource.index, 1);
