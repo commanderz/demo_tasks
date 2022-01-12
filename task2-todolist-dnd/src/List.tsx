@@ -230,7 +230,7 @@ function List() {
 
         return (
             <div className='divsecondary123'>
-                <h3 className="styleh3">{"[" + tableStage?.toString() + "]"}</h3>
+                <h3 className="styleh3" > {"[" + tableStage?.toString() + "]"}</h3>
                 <div className="div0">
                     <Droppable droppableId={"droppable" + p.numStage} mode="standard" isDropDisabled={false} isCombineEnabled={false} direction="vertical" >
                         {(provided, snapshot) => (
@@ -259,7 +259,7 @@ function List() {
                         )}
                     </Droppable>
                 </div>
-            </div>
+            </div >
         );
     };
     //=====================================================================================================================================
@@ -267,9 +267,12 @@ function List() {
     return (
         <div >
 
-            <div className="divsecondary123">
-                <div > <label>{"Назва задачі"}</label> <input value={formValues.taskName} onChange={e => handleFormChange('taskName', e.target.value)} ></input>
-                    <button disabled={!formValues.taskName} onClick={handleAddTodo}>{"Створити задачу"}</button>
+            <div className="divsecondary0">
+                <div > <h3 className="styleh3">{"[Нова задача]"}</h3>
+                    <QuoteItem className="divitem">
+                        <input className={"styleinput"} value={formValues.taskName} onChange={e => handleFormChange('taskName', e.target.value)} ></input>
+                        <button className={"btn"} disabled={!formValues.taskName} onClick={handleAddTodo}>{"Створити задачу"}</button>
+                    </QuoteItem>
                 </div>
             </div>
 

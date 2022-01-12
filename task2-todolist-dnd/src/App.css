@@ -74,6 +74,15 @@ div {
     display: flex;
     user-select: none;
 }
+.divsecondary0 {
+    width: 500px;
+    margin: 8px;
+    border-radius: 2px;
+    border: 1px solid rgb(122, 134, 154);
+    background-color: rgb(193, 199, 208);
+    display: flex;
+    flex-direction: column;
+}
 .divsecondary123 {
     width: 300px;
     margin: 8px;
@@ -103,9 +112,33 @@ div {
 .styleh3 {
     font-weight: bold;
     padding: 8px;
-    justify-content: center;
+    text-align:center;
 }
 
+.styleinput {
+  width: 300;
+  color:black;
+  font-size: 16px;
+  padding: 15px 32px;
+  display: inline-block;
+}
+
+.btn {
+  background-color: #4CAF50; /* Green */
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  transition-duration: 0.4s;
+}
+.btn:hover {
+  background-color: white; /* white */
+   border: 2px solid #4CAF50; /* Green */
+  color: black;
+
+}
 
 .grid {
   display: flex;
