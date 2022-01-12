@@ -1,7 +1,7 @@
 import './App.css';
 import React, { useEffect, ReactDOM, useState, SetStateAction } from 'react';
 import styled, { StyledComponent } from "@emotion/styled";
-import { DraggingStyle, NotDraggingStyle, DropResult, DragDropContext, Droppable, Draggable, ResponderProvided, resetServerContext, DroppableProvided, DraggableProvided, DraggableLocation } from "react-beautiful-dnd";
+import { DraggingStyle, NotDraggingStyle, DropResult, DragDropContext, Droppable, Draggable, ResponderProvided, resetServerContext, DroppableProvided, DraggableProvided, DraggableLocation, DragStart } from "react-beautiful-dnd";
 
 enum eTaskStage {//етап виконання: Створено, Заплановано, Завершено
     tsCreated = 'Список всіх справ',
@@ -60,7 +60,13 @@ function List() {
     const handleAddTodo: React.MouseEventHandler = (e: React.MouseEvent) => {
         //console.log('eventClick');
         if (!!formValues.id) {
-            tableValues.created.push(formValues);
+
+            if (tableValues?.created !== undefined) { tableValues?.created.push(formValues) }
+            else {
+                tableValues.created = [];
+                tableValues?.created.push(formValues);
+            }
+
             setTableValues({ created: tableValues.created, planed: tableValues.planed, finished: tableValues.finished });
             setFormValues(EMPTY_FORM);
 
@@ -172,6 +178,10 @@ function List() {
                     setTableValues({ created: tableValues.created, planed: tableValues.planed, finished: arr });
                 }
     }
+    function onDragStart(s: DragStart, r: ResponderProvided) {
+        //s.draggableId
+        //s.source.droppableId
+    }
 
     function onDragEnd(r: DropResult): void {
         if (!r.destination) {
@@ -238,23 +248,27 @@ function List() {
                                 style={getListStyle(snapshot.isDraggingOver)}
                             >
                                 {provided.placeholder}
-                                {newlist.map((item: iTaskType, index: number) => (
-                                    <Draggable draggableId={item.id} index={index} key={item.id} disableInteractiveElementBlocking={true}>
-                                        {(provided, snapshot) => (
-                                            <QuoteItem className="divitem"
-                                                ref={provided.innerRef}
-                                                {...provided.draggableProps}
-                                                {...provided.dragHandleProps}
-                                                style={getItemStyle(
-                                                    snapshot.isDragging,
-                                                    provided.draggableProps.style
-                                                )}
-                                            >
-                                                {item.taskName}
-                                            </QuoteItem>
-                                        )}
-                                    </Draggable>
-                                ))}
+
+                                {newlist?.length > 0 ?
+                                    newlist.map((item: iTaskType, index: number) => (
+                                        <Draggable draggableId={item.id} index={index} key={item.id} disableInteractiveElementBlocking={true}>
+                                            {(provided, snapshot) => (
+                                                <QuoteItem className="divitem"
+                                                    ref={provided.innerRef}
+                                                    {...provided.draggableProps}
+                                                    {...provided.dragHandleProps}
+                                                    style={getItemStyle(
+                                                        snapshot.isDragging,
+                                                        provided.draggableProps.style
+                                                    )}
+                                                >
+                                                    {item.taskName}
+                                                </QuoteItem>
+                                            )}
+                                        </Draggable>
+                                    ))
+                                    : <div>{"<Порожньо>"}</div>
+                                }
                             </div>
                         )}
                     </Droppable>
@@ -276,7 +290,7 @@ function List() {
                 </div>
             </div>
 
-            <DragDropContext onDragEnd={onDragEnd}   >
+            <DragDropContext onDragEnd={onDragEnd} onDragStart={onDragStart}  >
                 <div className="divmain1">
                     <div className="divmain2">
                         <Table numStage={1} />

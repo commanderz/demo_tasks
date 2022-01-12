@@ -73,9 +73,11 @@ div {
 .divmain2 {
     display: flex;
     user-select: none;
+    flex-wrap: wrap;
+    flex-direction: row;
 }
 .divsecondary0 {
-    width: 500px;
+    width: auto;
     margin: 8px;
     border-radius: 2px;
     border: 1px solid rgb(122, 134, 154);
@@ -117,7 +119,7 @@ div {
 }
 
 .styleinput {
-  width: 300;
+  width: auto;
   color:black;
   font-size: 16px;
   padding: 15px 32px;
