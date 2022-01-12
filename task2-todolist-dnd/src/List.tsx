@@ -132,6 +132,9 @@ function List() {
         destClone.splice(droppableDestination.index, 0, removed);
 
         const result: iTasks = EMPTY_TABLE; //tableValues;
+        result.created = Array.from(tableValues.created);
+        result.planed = Array.from(tableValues.planed);
+        result.finished = Array.from(tableValues.finished);
         if (droppableSource.droppableId === 'droppable1') {
             result.created = sourceClone;
         } else
