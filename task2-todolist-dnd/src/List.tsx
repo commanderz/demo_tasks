@@ -9,7 +9,7 @@ enum eTaskStage {//етап виконання: Створено, Заплано
     tsFinished = 'Завершені справи'
 }
 const id2List = {
-    droppable: 'created',
+    droppable1: 'created',
     droppable2: 'planed',
     droppable3: 'finished'
 };
@@ -55,13 +55,13 @@ const generateId = () => new Date().getTime().toString();
 //====================================================================================================================
 function List() {
     const [formValues, setFormValues] = useState<iTaskType>(EMPTY_FORM)
-    const [tableValues, setTableValues] = useState<iTasks>(loadTask());
+    const [tableValues, setTableValues] = useState<iTasks>(EMPTY_TABLE); //через (loadTask()) -  теж працює;
 
     const handleAddTodo: React.MouseEventHandler = (e: React.MouseEvent) => {
         //console.log('eventClick');
         if (!!formValues.id) {
-            tableValues?.created.push(formValues);
-            setTableValues(tableValues);
+            tableValues.created.push(formValues);
+            setTableValues({ created: tableValues.created, planed: tableValues.planed, finished: tableValues.finished });
             setFormValues(EMPTY_FORM);
 
         }
@@ -73,29 +73,20 @@ function List() {
     }
 
     useEffect(() => {
-
         const formString: string | null = localStorage.getItem(STORAGE_KEY_FORM);
         const newForm: iTaskType = formString ? JSON.parse(formString) : EMPTY_FORM;
         setFormValues(newForm);
 
-        /*const tableString: string | null = localStorage.getItem(STORAGE_KEY_TODOLIST);
-        const newTable: iTaskType[] = tableString ? JSON.parse(tableString) : [];
-        setTableValues(newTable);*/
+        const tableString: string | null = localStorage.getItem(STORAGE_KEY_TODOLIST);
+        const newTable: iTasks = tableString ? JSON.parse(tableString) : [];
+        setTableValues({ created: newTable.created, planed: newTable.planed, finished: newTable.finished });
         //console.log('READ ' + STORAGE_KEY_USERS + ' STORAGE =' + newUsers?.length);
     }, []);
 
-    function loadTask(): iTasks {
-        if (window !== undefined) {//сторона клієнта
-            const tasksString: string | null = localStorage.getItem(STORAGE_KEY_TODOLIST);
-            const newTasks: iTasks = tasksString ? JSON.parse(tasksString) : EMPTY_TABLE;
-            return (newTasks);
-        } else return EMPTY_TABLE;
-    }
-
     useEffect(() => { saveForm(formValues); }, [formValues]);
-    useEffect(() => { saveTable(tableValues); }, [tableValues, tableValues.created, tableValues.finished, tableValues.planed]);
-    function saveForm(formData: iTaskType) { localStorage.setItem(STORAGE_KEY_FORM, JSON.stringify(formData)); console.log('saveF=' + JSON.stringify(formData)) };
-    function saveTable(tableData: iTasks) { localStorage.setItem(STORAGE_KEY_TODOLIST, JSON.stringify(tableData)); console.log('saveT=' + JSON.stringify(tableData)) };
+    useEffect(() => { saveTable(tableValues); }, [tableValues]);
+    function saveForm(formData: iTaskType) { localStorage.setItem(STORAGE_KEY_FORM, JSON.stringify(formData)); /*console.log('saveF=' + JSON.stringify(formData)) */ };
+    function saveTable(tableData: iTasks) { localStorage.setItem(STORAGE_KEY_TODOLIST, JSON.stringify(tableData)); /*console.log('saveT=' + JSON.stringify(tableData))*/ };
 
 
     const getItemStyle = (isDragging: boolean, draggableStyle: DraggingStyle | NotDraggingStyle | undefined) => ({
@@ -117,7 +108,7 @@ function List() {
         width: 250
     });
 
-    function reorder2(list: iTaskType[], startIndex: number, endIndex: number): iTaskType[] {
+    function reorder(list: iTaskType[], startIndex: number, endIndex: number): iTaskType[] {
         const result: iTaskType[] = Array.from(list);
         const [removed] = result.splice(startIndex, 1);
         result.splice(endIndex, 0, removed);
@@ -154,7 +145,7 @@ function List() {
                 if (droppableDestination.droppableId === 'droppable3') {
                     result.finished = destClone;
                 }
-        console.log('created=' + result.created.length + ', planed=' + result.planed.length + ', finish=' + result.finished.length);
+        //console.log('created=' + result.created.length + ', planed=' + result.planed.length + ', finish=' + result.finished.length);
 
         return result;
     };
@@ -191,21 +182,19 @@ function List() {
             return;
         }
         if (r.destination.droppableId === r.source.droppableId) {
-            console.log('move src = ' + r.source.droppableId + ', idx=' + r.source.index);
-            console.log('move dest = ' + r.destination.droppableId + ', idx=' + r.destination.index);
-            const quote = reorder2(
+            //console.log('move src = ' + r.source.droppableId + ', idx=' + r.source.index+', move dest = ' + r.destination.droppableId + ', idx=' + r.destination.index);
+            const quote = reorder(
                 //state.quotes,
                 getList(r.source.droppableId),
                 r.source.index,
                 r.destination.index
             );
-            console.log(quote);
+            //console.log(quote);
             saveList(r.source.droppableId, quote);
 
 
         } else {
-            console.log('move2 src = ' + r.source.droppableId + ', idx=' + r.source.index);
-            console.log('move2 dest = ' + r.destination.droppableId + ', idx=' + r.destination.index);
+            //console.log('move2 src = ' + r.source.droppableId + ', idx=' + r.source.index + ', move2 dest = ' + r.destination.droppableId + ', idx=' + r.destination.index);
             const result: iTasks = move(
                 getList(r.source.droppableId),
                 getList(r.destination.droppableId),
@@ -213,7 +202,7 @@ function List() {
                 r.destination
             );
 
-            setTableValues(result);
+            setTableValues({ created: result.created, planed: result.planed, finished: result.finished });
 
         }
     }
