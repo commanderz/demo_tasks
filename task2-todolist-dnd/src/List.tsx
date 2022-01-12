@@ -267,8 +267,10 @@ function List() {
     return (
         <div >
 
-            <div > <label>{"Назва задачі"}</label> <input value={formValues.taskName} onChange={e => handleFormChange('taskName', e.target.value)} ></input>
-                <button disabled={!formValues.taskName} onClick={handleAddTodo}>{"Створити задачу"}</button>
+            <div className="divsecondary123">
+                <div > <label>{"Назва задачі"}</label> <input value={formValues.taskName} onChange={e => handleFormChange('taskName', e.target.value)} ></input>
+                    <button disabled={!formValues.taskName} onClick={handleAddTodo}>{"Створити задачу"}</button>
+                </div>
             </div>
 
             <DragDropContext onDragEnd={onDragEnd}   >
