@@ -47,7 +47,7 @@ const QuoteItem: StyledComponent<any, any, any> = styled.div`
 const STORAGE_KEY_TODOLIST: string = 'TodoList';
 const STORAGE_KEY_FORM: string = 'TodoForm';
 const EMPTY_FORM: iTaskType = { key: '', id: '', taskName: '', taskType: '' /*, taskStage: null*/ };
-const EMPTY_TABLE: iTasks = { created: [], finished: [], planed: [] };
+const EMPTY_TABLE: iTasks = { created: [], planed: [], finished: [] };
 const generateId = () => new Date().getTime().toString();
 //const todolist: iTaskType[] = [];
 
@@ -60,16 +60,9 @@ function List() {
     const handleAddTodo: React.MouseEventHandler = (e: React.MouseEvent) => {
         //console.log('eventClick');
         if (!!formValues.id) {
-
-            if (tableValues?.created !== undefined) { tableValues?.created.push(formValues) }
-            else {
-                tableValues.created = [];
-                tableValues?.created.push(formValues);
-            }
-
+            tableValues.created.push(formValues);
             setTableValues({ created: tableValues.created, planed: tableValues.planed, finished: tableValues.finished });
             setFormValues(EMPTY_FORM);
-
         }
     }
 
@@ -84,14 +77,14 @@ function List() {
         setFormValues(newForm);
 
         const tableString: string | null = localStorage.getItem(STORAGE_KEY_TODOLIST);
-        const newTable: iTasks = tableString ? JSON.parse(tableString) : [];
+        const newTable: iTasks = tableString ? JSON.parse(tableString) : EMPTY_TABLE;
         setTableValues({ created: newTable.created, planed: newTable.planed, finished: newTable.finished });
-        //console.log('READ ' + STORAGE_KEY_USERS + ' STORAGE =' + newUsers?.length);
+        //console.log('READ ' + STORAGE_KEY_FORM + ' ,' + STORAGE_KEY_TODOLIST + ', table =' + tableString);
     }, []);
 
     useEffect(() => { saveForm(formValues); }, [formValues]);
     useEffect(() => { saveTable(tableValues); }, [tableValues]);
-    function saveForm(formData: iTaskType) { localStorage.setItem(STORAGE_KEY_FORM, JSON.stringify(formData)); /*console.log('saveF=' + JSON.stringify(formData)) */ };
+    function saveForm(formData: iTaskType) { localStorage.setItem(STORAGE_KEY_FORM, JSON.stringify(formData)); /*console.log('saveF=' + JSON.stringify(formData))*/ };
     function saveTable(tableData: iTasks) { localStorage.setItem(STORAGE_KEY_TODOLIST, JSON.stringify(tableData)); /*console.log('saveT=' + JSON.stringify(tableData))*/ };
 
 
@@ -122,6 +115,7 @@ function List() {
 
     };
     function move(source: iTaskType[], destination: iTaskType[], droppableSource: DraggableLocation, droppableDestination: DraggableLocation): iTasks {
+        //console.log('source=' + source?.length + ', destination=' + destination?.length);
         const sourceClone = Array.from(source);
         const destClone = Array.from(destination);
         const [removed] = sourceClone.splice(droppableSource.index, 1);
@@ -220,7 +214,7 @@ function List() {
     //=========================================================================================================================
     function Table(p: any): JSX.Element { //{ numStage: number }
         //const len = tableValues.length - 1;
-        //console.log('numStage=' + p.numStage + ', cnt=' + len + ', name=' + todolist[len]?.taskName + ', type=' + todolist[len]?.taskType + ', stage=' + todolist[len]?.taskStage);
+        //console.log('numStage=' + p.numStage);
         let tableStage: eTaskStage | null = null;
         let newlist: iTaskType[] = [];
         if (p.numStage === 1) { tableStage = eTaskStage.tsCreated; newlist = tableValues.created; } else
@@ -235,43 +229,46 @@ function List() {
             if (value.taskStage === tableStage) { newlist.push(value); }
         });*/
 
-        //console.log('new=' + newlist.length);
+        //console.log('new=' + newlist?.length);
         //=========================================================================================================
 
         return (
             <div className='divsecondary123'>
                 <h3 className="styleh3" > {"[" + tableStage?.toString() + "]"}</h3>
                 <div className="div0">
-                    <Droppable droppableId={"droppable" + p.numStage} mode="standard" isDropDisabled={false} isCombineEnabled={false} direction="vertical" >
-                        {(provided, snapshot) => (
-                            <div ref={provided.innerRef} {...provided.droppableProps}
-                                style={getListStyle(snapshot.isDraggingOver)}
-                            >
-                                {provided.placeholder}
+                    {
+                        <Droppable droppableId={"droppable" + p.numStage} mode="standard" isDropDisabled={false} isCombineEnabled={false} direction="vertical" >
+                            {(provided, snapshot) => (
+                                <div ref={provided.innerRef}{...provided.droppableProps}
+                                    style={getListStyle(snapshot.isDraggingOver)}
 
-                                {newlist?.length > 0 ?
-                                    newlist.map((item: iTaskType, index: number) => (
-                                        <Draggable draggableId={item.id} index={index} key={item.id} disableInteractiveElementBlocking={true}>
-                                            {(provided, snapshot) => (
-                                                <QuoteItem className="divitem"
-                                                    ref={provided.innerRef}
-                                                    {...provided.draggableProps}
-                                                    {...provided.dragHandleProps}
-                                                    style={getItemStyle(
-                                                        snapshot.isDragging,
-                                                        provided.draggableProps.style
-                                                    )}
-                                                >
-                                                    {item.taskName}
-                                                </QuoteItem>
-                                            )}
-                                        </Draggable>
-                                    ))
-                                    : <div>{"<Порожньо>"}</div>
-                                }
-                            </div>
-                        )}
-                    </Droppable>
+                                >
+                                    {
+                                        newlist.map((item: iTaskType, index: number) => (
+                                            <Draggable draggableId={item.id} index={index} key={item.id} disableInteractiveElementBlocking={true} >
+                                                {(provided, snapshot) => (
+                                                    <QuoteItem className="divitem"
+                                                        ref={provided.innerRef}
+                                                        {...provided.draggableProps}
+                                                        {...provided.dragHandleProps}
+
+                                                        style={getItemStyle(
+                                                            snapshot.isDragging,
+                                                            provided.draggableProps.style
+                                                        )}
+                                                    >
+                                                        {item.taskName}
+                                                    </QuoteItem>
+                                                )}
+                                            </Draggable>
+                                        ))
+                                    }
+                                    {provided.placeholder}
+                                </div>
+                            )}
+                        </Droppable>
+
+                    }
                 </div>
             </div >
         );
