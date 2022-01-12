@@ -130,14 +130,12 @@ function List() {
 
         destClone.splice(droppableDestination.index, 0, removed);
 
-        const result: iTasks = EMPTY_TABLE;
+        const result: iTasks = tableValues;
         if (droppableSource.droppableId === 'droppable1') {
             result.created = sourceClone;
-
         } else
             if (droppableSource.droppableId === 'droppable2') {
                 result.planed = sourceClone;
-
             } else
                 if (droppableSource.droppableId === 'droppable3') {
                     result.finished = sourceClone;
@@ -145,11 +143,9 @@ function List() {
 
         if (droppableDestination.droppableId === 'droppable1') {
             result.created = destClone;
-
         } else
             if (droppableDestination.droppableId === 'droppable2') {
                 result.planed = destClone;
-
             } else
                 if (droppableDestination.droppableId === 'droppable3') {
                     result.finished = destClone;
@@ -206,6 +202,14 @@ function List() {
         } else {
             console.log('move2 src = ' + r.source.droppableId + ', idx=' + r.source.index);
             console.log('move2 dest = ' + r.destination.droppableId + ', idx=' + r.destination.index);
+            const result: iTasks = move(
+                getList(r.source.droppableId),
+                getList(r.destination.droppableId),
+                r.source,
+                r.destination
+            );
+
+            setTableValues(result);
 
         }
     }
