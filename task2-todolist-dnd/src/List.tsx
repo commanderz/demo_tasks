@@ -93,9 +93,9 @@ function List() {
     }
 
     useEffect(() => { saveForm(formValues); }, [formValues]);
-    useEffect(() => { saveTable(tableValues); }, [tableValues]);
-    function saveForm(formData: iTaskType) { localStorage.setItem(STORAGE_KEY_FORM, JSON.stringify(formData)); };
-    function saveTable(tableData: iTasks) { localStorage.setItem(STORAGE_KEY_TODOLIST, JSON.stringify(tableData)); };
+    useEffect(() => { saveTable(tableValues); }, [tableValues, tableValues.created, tableValues.finished, tableValues.planed]);
+    function saveForm(formData: iTaskType) { localStorage.setItem(STORAGE_KEY_FORM, JSON.stringify(formData)); console.log('saveF=' + JSON.stringify(formData)) };
+    function saveTable(tableData: iTasks) { localStorage.setItem(STORAGE_KEY_TODOLIST, JSON.stringify(tableData)); console.log('saveT=' + JSON.stringify(tableData)) };
 
 
     const getItemStyle = (isDragging: boolean, draggableStyle: DraggingStyle | NotDraggingStyle | undefined) => ({
@@ -131,7 +131,7 @@ function List() {
 
         destClone.splice(droppableDestination.index, 0, removed);
 
-        const result: iTasks = tableValues;
+        const result: iTasks = EMPTY_TABLE; //tableValues;
         if (droppableSource.droppableId === 'droppable1') {
             result.created = sourceClone;
         } else
@@ -151,7 +151,7 @@ function List() {
                 if (droppableDestination.droppableId === 'droppable3') {
                     result.finished = destClone;
                 }
-
+        console.log('created=' + result.created.length + ', planed=' + result.planed.length + ', finish=' + result.finished.length);
 
         return result;
     };
