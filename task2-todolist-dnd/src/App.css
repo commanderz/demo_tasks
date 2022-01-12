@@ -112,6 +112,10 @@ div {
     position: relative;
     border-radius: 8px;
 }
+.grayed {
+  background-color: lightgray;
+  border: 1px solid rgb(137, 147, 164);
+}
 .styleh3 {
     font-weight: bold;
     padding: 8px;

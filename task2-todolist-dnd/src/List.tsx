@@ -243,7 +243,7 @@ function List() {
                                     style={getListStyle(snapshot.isDraggingOver)}
 
                                 >
-                                    {
+                                    {newlist?.length > 0 ?
                                         newlist.map((item: iTaskType, index: number) => (
                                             <Draggable draggableId={item.id} index={index} key={item.id} disableInteractiveElementBlocking={true} >
                                                 {(provided, snapshot) => (
@@ -262,6 +262,7 @@ function List() {
                                                 )}
                                             </Draggable>
                                         ))
+                                        : <div className="divitem grayed">{'<Порожньо>'}</div>
                                     }
                                     {provided.placeholder}
                                 </div>
