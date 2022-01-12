@@ -73,6 +73,7 @@ function List() {
     }
 
     useEffect(() => {
+
         const formString: string | null = localStorage.getItem(STORAGE_KEY_FORM);
         const newForm: iTaskType = formString ? JSON.parse(formString) : EMPTY_FORM;
         setFormValues(newForm);
@@ -86,7 +87,7 @@ function List() {
     function loadTask(): iTasks {
         if (window !== undefined) {//сторона клієнта
             const tasksString: string | null = localStorage.getItem(STORAGE_KEY_TODOLIST);
-            const newTasks: iTasks = tasksString ? JSON.parse(tasksString) : [];
+            const newTasks: iTasks = tasksString ? JSON.parse(tasksString) : EMPTY_TABLE;
             return (newTasks);
         } else return EMPTY_TABLE;
     }
