@@ -1,7 +1,9 @@
-import './App.css';
-import React, { useEffect, ReactDOM, useState, SetStateAction } from 'react';
-import styled, { StyledComponent } from "@emotion/styled";
+import './List.css';
+import React, { useEffect, useState } from 'react';
+//import styled from '@emotion/styled/types/base';
+import styled, { StyledComponent } from '@emotion/styled';
 import { DraggingStyle, NotDraggingStyle, DropResult, DragDropContext, Droppable, Draggable, ResponderProvided, resetServerContext, DroppableProvided, DraggableProvided, DraggableLocation, DragStart } from "react-beautiful-dnd";
+
 
 enum eTaskStage {//етап виконання: Створено, Заплановано, Завершено
     tsCreated = 'Список всіх справ',
@@ -28,20 +30,31 @@ interface iTasks {
     finished: iTaskType[];
 }
 
-interface iInputData {
+/*interface iInputData {
     value: string;
     onChange: any;
     onSetValue: React.Dispatch<SetStateAction<string>>;
-};
+};*/
 const grid: number = 8;
 const QuoteItem: StyledComponent<any, any, any> = styled.div`
+  width: auto;
+  height: auto;
+  border: 0px solid grey;
+  margin-bottom: ${grid}px;
+  padding: ${grid}px;
+  background-color: lightblue;
+  `;
+
+/*function QuoteItem(): StyledComponent<any, any, any> {
+    return (styled.div`
   width: auto;
   height: auto;
   border: 1px solid grey;
   margin-bottom: ${grid}px;
   padding: ${grid}px;
   background-color: lightblue;
-  `;
+  `);
+};*/
 
 
 const STORAGE_KEY_TODOLIST: string = 'TodoList';
@@ -54,7 +67,7 @@ const generateId = () => new Date().getTime().toString();
 
 //====================================================================================================================
 function List() {
-    const [formValues, setFormValues] = useState<iTaskType>(EMPTY_FORM)
+    const [formValues, setFormValues] = useState<iTaskType>(EMPTY_FORM);
     const [tableValues, setTableValues] = useState<iTasks>(EMPTY_TABLE); //через (loadTask()) -  теж працює;
 
     const handleAddTodo: React.MouseEventHandler = (e: React.MouseEvent) => {
@@ -80,7 +93,27 @@ function List() {
         const newTable: iTasks = tableString ? JSON.parse(tableString) : EMPTY_TABLE;
         setTableValues({ created: newTable.created, planed: newTable.planed, finished: newTable.finished });
         //console.log('READ ' + STORAGE_KEY_FORM + ' ,' + STORAGE_KEY_TODOLIST + ', table =' + tableString);
+
+        //regServiceWorker();
     }, []);
+
+    /*function regServiceWorker() {
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function () {
+                navigator.serviceWorker.register('service-worker.js').then(function (registration) {
+                    // Registration was successful
+                    console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                }, function (err) {
+                    // registration failed :(
+                    console.log('ServiceWorker registration failed: ', err);
+                }).catch(function (err) {
+                    console.log(err)
+                });
+            });
+        } else {
+            console.log('service worker is not supported');
+        }
+    }*/
 
     useEffect(() => { saveForm(formValues); }, [formValues]);
     useEffect(() => { saveTable(tableValues); }, [tableValues]);
@@ -93,18 +126,20 @@ function List() {
         userSelect: "none",
         padding: grid * 2,
         margin: `0 0 ${grid}px 0`,
-
         // change background colour if dragging
         background: isDragging ? "lightgreen" : null,
-
+        boxShadow: isDragging ? "0 4px 8px 0 #444, 0 6px 20px 0 #444" : null,
         // styles we need to apply on draggables
         ...draggableStyle
     });
 
     const getListStyle = (isDraggingOver: boolean) => ({
-        background: isDraggingOver ? "lightblue" : "lightgrey",
+        background: isDraggingOver ? '#10AA02' : "#603E77",
         padding: grid,
-        width: 250
+        borderRadius: 8,
+        transition: "background-color 1.0s ease 0s"
+
+        //width: 300
     });
 
     function reorder(list: iTaskType[], startIndex: number, endIndex: number): iTaskType[] {
@@ -233,55 +268,53 @@ function List() {
         //=========================================================================================================
 
         return (
-            <div className='divsecondary123'>
-                <h3 className="styleh3" > {"[" + tableStage?.toString() + "]"}</h3>
-                <div className="div0">
-                    {
-                        <Droppable droppableId={"droppable" + p.numStage} mode="standard" isDropDisabled={false} isCombineEnabled={false} direction="vertical" >
-                            {(provided, snapshot) => (
-                                <div ref={provided.innerRef}{...provided.droppableProps}
-                                    style={getListStyle(snapshot.isDraggingOver)}
+            <div className={p.classNamez}>
+                <h4 className="styleh4" > {tableStage?.toString()}</h4>
+                {
+                    <Droppable droppableId={"droppable" + p.numStage} mode="standard" isDropDisabled={false} isCombineEnabled={false} direction="vertical" >
+                        {(provided, snapshot) => (
+                            <div ref={provided.innerRef}{...provided.droppableProps}
+                                style={getListStyle(snapshot.isDraggingOver)}
+                            >
+                                {newlist?.length > 0 ?
+                                    newlist.map((item: iTaskType, index: number) => (
+                                        <Draggable draggableId={item.id} index={index} key={item.id} disableInteractiveElementBlocking={true} >
+                                            {(provided, snapshot) => (
+                                                <QuoteItem className="divitem tl"
+                                                    ref={provided.innerRef}
+                                                    {...provided.draggableProps}
+                                                    {...provided.dragHandleProps}
 
-                                >
-                                    {newlist?.length > 0 ?
-                                        newlist.map((item: iTaskType, index: number) => (
-                                            <Draggable draggableId={item.id} index={index} key={item.id} disableInteractiveElementBlocking={true} >
-                                                {(provided, snapshot) => (
-                                                    <QuoteItem className="divitem"
-                                                        ref={provided.innerRef}
-                                                        {...provided.draggableProps}
-                                                        {...provided.dragHandleProps}
+                                                    style={getItemStyle(
+                                                        snapshot.isDragging,
+                                                        provided.draggableProps.style
+                                                    )}
+                                                >
+                                                    {item.taskName}
+                                                </QuoteItem>
+                                            )}
+                                        </Draggable>
+                                    ))
+                                    : <div className="divitem grayed tc">{'<Порожньо>'}</div>
+                                }
+                                {provided.placeholder}
+                            </div>
+                        )}
+                    </Droppable>
 
-                                                        style={getItemStyle(
-                                                            snapshot.isDragging,
-                                                            provided.draggableProps.style
-                                                        )}
-                                                    >
-                                                        {item.taskName}
-                                                    </QuoteItem>
-                                                )}
-                                            </Draggable>
-                                        ))
-                                        : <div className="divitem grayed">{'<Порожньо>'}</div>
-                                    }
-                                    {provided.placeholder}
-                                </div>
-                            )}
-                        </Droppable>
+                }
 
-                    }
-                </div>
             </div >
         );
     };
     //=====================================================================================================================================
 
     return (
-        <div >
+        <div className="wrapper" >
 
-            <div className="divsecondary0">
-                <div > <h3 className="styleh3">{"[Нова задача]"}</h3>
-                    <QuoteItem className="divitem">
+            <div className="header">
+                <div > <h4 className="styleh4">{"Нова задача"}</h4>
+                    <QuoteItem className="divitem tc">
                         <input className={"styleinput"} value={formValues.taskName} onChange={e => handleFormChange('taskName', e.target.value)} ></input>
                         <button className={"btn"} disabled={!formValues.taskName} onClick={handleAddTodo}>{"Створити задачу"}</button>
                     </QuoteItem>
@@ -289,15 +322,11 @@ function List() {
             </div>
 
             <DragDropContext onDragEnd={onDragEnd} onDragStart={onDragStart}  >
-                <div className="divmain1">
-                    <div className="divmain2">
-                        <Table numStage={1} />
+                <Table numStage={1} classNamez={'content1'} />
 
-                        <Table numStage={2} />
+                <Table numStage={2} classNamez={'content2'} />
 
-                        <Table numStage={3} />
-                    </div>
-                </div>
+                <Table numStage={3} classNamez={'content3'} />
             </DragDropContext >
 
         </div >
