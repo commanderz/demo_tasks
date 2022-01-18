@@ -2,7 +2,7 @@ import './List.css';
 import React, { useEffect, useState } from 'react';
 //import styled from '@emotion/styled/types/base';
 import styled, { StyledComponent } from '@emotion/styled';
-import { DraggingStyle, NotDraggingStyle, DropResult, DragDropContext, Droppable, Draggable, ResponderProvided, resetServerContext, DroppableProvided, DraggableProvided, DraggableLocation, DragStart } from "react-beautiful-dnd";
+import { DraggingStyle, NotDraggingStyle, DropResult, DragDropContext, Droppable, Draggable, ResponderProvided, DraggableLocation, DragStart } from "react-beautiful-dnd"; //resetServerContext, DroppableProvided, DraggableProvided
 
 
 enum eTaskStage {//етап виконання: Створено, Заплановано, Завершено
@@ -10,11 +10,11 @@ enum eTaskStage {//етап виконання: Створено, Заплано
     tsPlaned = 'Заплановані справи',
     tsFinished = 'Завершені справи'
 }
-const id2List = {
+/*const id2List = {
     droppable1: 'created',
     droppable2: 'planed',
     droppable3: 'finished'
-};
+};*/
 
 interface iTaskType {
     key: string;

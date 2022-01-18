@@ -19,8 +19,10 @@ const isLocalhost = Boolean(
 );
 
 export function register(config) {
-  console.log('start registration SW');
-  if (process.env.NODE_ENV === 'production' && 'serviceWorker' in navigator) {
+  console.log('start registration SW (prod=' + process.env.NODE_ENV + ')');
+  if (((process.env.NODE_ENV === 'production') || (process.env.NODE_ENV === 'development'))
+    && ('serviceWorker' in navigator)
+  ) {
     // The URL constructor is available in all browsers that support SW.
     const publicUrl = new URL(process.env.PUBLIC_URL, window.location.href);
     if (publicUrl.origin !== window.location.origin) {
@@ -55,6 +57,7 @@ export function register(config) {
 }
 
 function registerValidSW(swUrl, config) {
+  console.log('try reg, url=' + swUrl);
   navigator.serviceWorker
     .register(swUrl)
     .then((registration) => {
@@ -100,6 +103,7 @@ function registerValidSW(swUrl, config) {
 
 function checkValidServiceWorker(swUrl, config) {
   // Check if the service worker can be found. If it can't reload the page.
+  console.log('check url=' + swUrl + ', config=' + config);
   fetch(swUrl, {
     headers: { 'Service-Worker': 'script' },
   })
@@ -135,5 +139,22 @@ export function unregister() {
       .catch((error) => {
         console.error(error.message);
       });
+  }
+}
+
+export function register2() {
+  console.log('start registration SW2');
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function () {
+      navigator.serviceWorker.register('/service-worker.js', { scope: '', type: 'classic', updateViaCache: 'all' }).then(function (registration) {
+        // Registration was successful
+        console.log('ServiceWorker registration successful with scope: ', registration.scope);
+      }, function (err) {
+        // registration failed :(
+        console.log('ServiceWorker registration failed: ', err);
+      }).catch(function (err) {
+        console.log(err)
+      });
+    });
   }
 }
