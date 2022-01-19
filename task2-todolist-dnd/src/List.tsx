@@ -5,6 +5,7 @@ import styled, { StyledComponent } from '@emotion/styled';
 import { DraggingStyle, NotDraggingStyle, DropResult, DragDropContext, Droppable, Draggable, ResponderProvided, DraggableLocation, DragStart } from "react-beautiful-dnd"; //resetServerContext, DroppableProvided, DraggableProvided
 
 
+
 enum eTaskStage {//етап виконання: Створено, Заплановано, Завершено
     tsCreated = 'Список всіх справ',
     tsPlaned = 'Заплановані справи',
@@ -49,8 +50,8 @@ const getItemStyle = (isDragging: boolean, draggableStyle: DraggingStyle | NotDr
     ...draggableStyle
 });
 
-const getListStyle = (isDraggingOver: boolean) => ({
-    background: isDraggingOver ? '#10AA02' : "#603E77",
+const getListStyle = (isDraggingOver: boolean, isDel: boolean = false) => ({
+    background: isDraggingOver ? (isDel ? '#EC6D5C' : '#10AA02') : "#686868",
     padding: grid,
     borderRadius: 8,
     transition: "background-color 1.0s ease 0s"
@@ -133,13 +134,14 @@ function List() {
         else if (id === 'droppable3') { setTableValues({ ...tableValues, finished: arr }); }
     }
 
+    function onDragEnd_Delete(r: DropResult, p: ResponderProvided) {
+        if (!r.destination) { return; }
+        console.log('delete = ' + r.source.droppableId);
+    }
+
     function onDragEnd(r: DropResult): void {
-        if (!r.destination) {
-            return;
-        }
-        if ((r.destination.index === r.source.index) && (r.destination.droppableId === r.source.droppableId)) {
-            return;
-        }
+        if (!r.destination) { return; }
+        if ((r.destination.index === r.source.index) && (r.destination.droppableId === r.source.droppableId)) { return; }
         if (r.destination.droppableId === r.source.droppableId) {
             const quote = reorder(
                 getList(r.source.droppableId),
@@ -164,16 +166,34 @@ function List() {
 
     return (
         <div className="wrapper" >
-            <div className="header">
-                <div > <h4 className="styleh4">{"Нова задача"}</h4>
-                    <QuoteItem className="divitem tc">
-                        <input className="styleinput" value={formValues.taskName} onChange={e => handleFormChange('taskName', e.target.value)} ></input>
-                        <button className="btn" disabled={!formValues.taskName} onClick={handleAddTodo}>{"Створити задачу"}</button>
-                    </QuoteItem>
-                </div>
-            </div>
-
             <DragDropContext onDragEnd={onDragEnd}   >
+                <div className="header">
+                    <div> <h4 className="styleh4">{"Нова задача"}</h4>
+                        <QuoteItem className="divitem tc">
+                            <input className="styleinput" value={formValues.taskName} onChange={e => handleFormChange('taskName', e.target.value)} ></input>
+                            <button className="btn" disabled={!formValues.taskName} onClick={handleAddTodo}>{"Створити задачу"}</button>
+                        </QuoteItem>
+
+
+                        <Droppable droppableId={"droppableDel"} mode="standard" isDropDisabled={false} isCombineEnabled={false} direction="vertical" >
+                            {(provided, snapshot) => (
+                                <div ref={provided.innerRef}{...provided.droppableProps}
+                                    style={getListStyle(snapshot.isDraggingOver, true)}
+                                >
+                                    <div className="divitem grayed tc">{'<Перетягніть сюди щоб видалити>'}
+                                    </div>
+                                    {provided.placeholder}
+                                </div>
+                            )}
+                        </Droppable>
+
+
+
+                    </div>
+
+                </div>
+
+
                 <Table num={1} classNamez='content1' title={eTaskStage.tsCreated} list={tableValues.created} />
                 <Table num={2} classNamez='content2' title={eTaskStage.tsPlaned} list={tableValues.planed} />
                 <Table num={3} classNamez='content3' title={eTaskStage.tsFinished} list={tableValues.finished} />
@@ -189,7 +209,7 @@ function Table(p: { num: number, classNamez: string, title: eTaskStage | null, l
     return (
         <div className={p.classNamez}>
             <h4 className="styleh4" > {p.title?.toString()}</h4>
-            {<Droppable droppableId={"droppable" + p.num} mode="standard" isDropDisabled={false} isCombineEnabled={false} direction="vertical" >
+            <Droppable droppableId={"droppable" + p.num} mode="standard" isDropDisabled={false} isCombineEnabled={false} direction="vertical" >
                 {(provided, snapshot) => (
                     <div ref={provided.innerRef}{...provided.droppableProps}
                         style={getListStyle(snapshot.isDraggingOver)}
@@ -219,7 +239,7 @@ function Table(p: { num: number, classNamez: string, title: eTaskStage | null, l
                     </div>
                 )}
             </Droppable>
-            }
+
         </div >
     );
 };
