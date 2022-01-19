@@ -134,11 +134,6 @@ function List() {
         else if (id === 'droppable3') { setTableValues({ ...tableValues, finished: arr }); }
     }
 
-    function onDragEnd_Delete(r: DropResult, p: ResponderProvided) {
-        if (!r.destination) { return; }
-        console.log('delete = ' + r.source.droppableId);
-    }
-
     function onDragEnd(r: DropResult): void {
         if (!r.destination) { return; }
         if ((r.destination.index === r.source.index) && (r.destination.droppableId === r.source.droppableId)) { return; }
@@ -174,23 +169,18 @@ function List() {
                             <button className="btn" disabled={!formValues.taskName} onClick={handleAddTodo}>{"Створити задачу"}</button>
                         </QuoteItem>
 
-
                         <Droppable droppableId={"droppableDel"} mode="standard" isDropDisabled={false} isCombineEnabled={false} direction="vertical" >
                             {(provided, snapshot) => (
                                 <div ref={provided.innerRef}{...provided.droppableProps}
                                     style={getListStyle(snapshot.isDraggingOver, true)}
                                 >
-                                    <div className="divitem grayed tc">{'<Перетягніть сюди щоб видалити>'}
+                                    <div className="divitem grayed tc">{snapshot.isDraggingOver ? '<Видалити>' : '<Перетягніть сюди щоб видалити>'}
                                     </div>
                                     {provided.placeholder}
                                 </div>
                             )}
                         </Droppable>
-
-
-
                     </div>
-
                 </div>
 
 
