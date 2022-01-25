@@ -47,6 +47,15 @@ table {
 	border-spacing: 0;
 }
 
+/* montserrat-300 - latin_cyrillic-ext_cyrillic */
+@font-face {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 300;
+  src: local(''),
+       url('../fonts/montserrat-v21-latin_cyrillic-ext_cyrillic-300.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
+       url('../fonts/montserrat-v21-latin_cyrillic-ext_cyrillic-300.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+}
 /* montserrat-regular - latin_cyrillic-ext_cyrillic */
 @font-face {
   font-family: 'Montserrat';
@@ -84,27 +93,46 @@ html {
 
 body {
     font-family: "Montserrat";
+    background-color: rgba(0, 0, 0, 0.7);
 }
 .wrapper {
+
     max-width: 1260px;
     margin-left:330px;
     margin-right:330px;
 }
-
 .header {
-    background-color: rgba(0, 0, 0, 0.99);
+    background-color: rgba(0, 0, 0, 0.656);
 }
+
 .header__wrapper{
     display: flex;
-    flex-wrap: wrap;
-    align-items: flex-end;
-    justify-content: space-between;
-
+    flex-direction: column;
 }
+
+.header__logo{
+    margin-top: 50px;
+    margin-bottom: 60px;
+}
+
+.header__title{
+    margin-top: 50px;
+    margin-bottom: 50px;
+    font-family: "Montserrat";
+    font-weight: 300;
+    color: #ff2e53;
+    font-size: 45px;
+    line-height: 50px;
+    
+}
+
 
 .header__list{
     display: flex;
-    flex-wrap: wrap; 
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    margin-bottom: 100px;
 }
 
 .header__item{
@@ -112,4 +140,14 @@ body {
 }
 .header__item:last-child{
     margin-right:0px;
+}
+
+
+.header__post{
+ width:auto;
+ height: 420px;
+ margin-bottom: 150px; 
+ background-color: rgb(54, 54, 54);
+
+
 }
