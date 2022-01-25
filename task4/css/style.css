@@ -83,10 +83,7 @@ box-sizing: border-box;
     box-sizing: inherit;
 }
 
-.item{
-    width: 400px;
-    height: 500px;
-    background-color: #444;
-    padding: 20px;
-    /*background-image: "../img/image-id-1.png";*/
+.wrapper{
+
+    max-width: 1920px;
 }
