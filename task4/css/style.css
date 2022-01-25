@@ -92,5 +92,24 @@ body {
 }
 
 .header {
-    background-color: rgba(0, 0, 0, 0.788);
+    background-color: rgba(0, 0, 0, 0.99);
+}
+.header__wrapper{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+
+}
+
+.header__list{
+    display: flex;
+    flex-wrap: wrap; 
+}
+
+.header__item{
+    margin-right: 30px;
+}
+.header__item:last-child{
+    margin-right:0px;
 }
