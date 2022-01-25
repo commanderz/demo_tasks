@@ -76,15 +76,16 @@ table {
 }
 
 html {
-box-sizing: border-box;
-
+  box-sizing: border-box;
 }
 *, *::before, *::after{
     box-sizing: inherit;
 }
 
-.wrapper{
-
+body {
+    font-family: "Montserrat";
+}
+.wrapper {
     max-width: 1920px;
     margin:0 auto;
 }
