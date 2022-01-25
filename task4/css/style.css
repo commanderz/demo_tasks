@@ -144,7 +144,7 @@ padding: 15px 30px;
     border: 1px solid rgba(151, 163, 203, 0.3);
 }
 
-.header__item:hover{
+.header__item:hover, .header__item:focus, .header__item:active {
     background: #323749;
     
     
@@ -156,20 +156,14 @@ padding: 15px 30px;
 
 .header__link{
 /* Buttons Labels */
-
 font-family: Montserrat;
 font-style: normal;
 font-weight: 600;
 font-size: 13px;
 line-height: 20px;
 /* identical to box height, or 154% */
-
 text-transform: uppercase;
-
-/* White */
-
-color: #FFFFFF;
-
+color: white;
 
 }
 
