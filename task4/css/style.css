@@ -148,6 +148,10 @@ body {
  height: 420px;
  margin-bottom: 150px; 
  background-color: rgb(54, 54, 54);
+}
 
-
+.post_wrapper {
+   display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
 }
