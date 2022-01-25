@@ -155,3 +155,13 @@ body {
     flex-direction: row;
     flex-wrap: nowrap;
 }
+
+.post_text{
+font-family: Montserrat;
+font-style: normal;
+font-weight: normal;
+font-size: 25px;
+line-height: 35px;
+margin-top: 60px;
+color: lightgray;
+}
