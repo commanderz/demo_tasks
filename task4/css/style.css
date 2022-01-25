@@ -92,7 +92,7 @@ html {
 }
 
 body {
-    font-family: "Montserrat";
+    font-family: Montserrat;
     background-color: rgba(0, 0, 0, 0.7);
 }
 .wrapper {
@@ -118,7 +118,7 @@ body {
 .header__title{
     margin-top: 50px;
     margin-bottom: 50px;
-    font-family: "Montserrat";
+    font-family: Montserrat;
     font-weight: 300;
     color: #ff2e53;
     font-size: 45px;
@@ -136,12 +136,40 @@ body {
 }
 
 .header__item{
+    background: #323749;
+border-radius: 25px;
+padding: 15px 30px;
     margin-right: 30px;
+    
 }
+
+.header__item::after{
+    border: 1px solid rgba(151, 163, 203, 0.3);
+    border-radius: 25px;
+}
+
 .header__item:last-child{
     margin-right:0px;
 }
 
+.header__link{
+/* Buttons Labels */
+
+font-family: Montserrat;
+font-style: normal;
+font-weight: 600;
+font-size: 13px;
+line-height: 20px;
+/* identical to box height, or 154% */
+
+text-transform: uppercase;
+
+/* White */
+
+color: #FFFFFF;
+
+
+}
 
 .header__post{
  width:auto;
@@ -164,4 +192,21 @@ font-size: 25px;
 line-height: 35px;
 margin-top: 60px;
 color: lightgray;
+}
+
+.post_link{
+font-family: Montserrat;
+font-style: normal;
+font-weight: normal;
+font-size: 25px;
+line-height: 35px;
+color: lightgrey;
+border: 1px solid #000000;
+text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+
+}
+
+.post_img{
+    margin-left:62px;
+    margin-right: 130px;
 }
