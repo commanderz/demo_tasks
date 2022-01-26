@@ -189,10 +189,12 @@ a:focus {
 
 .header__item:hover, .header__item:focus, .header__item:active {
     background: #323749;
+    border: 1px solid #323749;
 }
 
 .tag__link:hover, .tag__link:focus, .tag__link:active{
     background: #323749;
+    border: 1px solid #323749;
 }
 
 .header__item0:last-child{
