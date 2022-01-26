@@ -237,8 +237,8 @@ a:focus {
 }
 
 .header__post:hover .post__link{
-  /*transform: scale(1.10);*/
   color:white;
+  transition: .9s all;
 }
 .header__post:hover .post__arrow{
   left :0px;
@@ -249,11 +249,18 @@ a:focus {
    transition: .9s all;
 }
 
+.header__post:hover .img{
+ transform: scale(1.05);
+}
+
+
+
 
 .post__wrapper {
    display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
+    overflow: hidden;
 }
 
 
