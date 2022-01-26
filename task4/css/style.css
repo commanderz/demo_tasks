@@ -160,11 +160,11 @@ a:focus {
 
 }
 
-.header__item0{
+.header__item{
     margin-right: 30px;
 }
 
-.header__item{
+.header__link{
     border-radius: 25px;
     padding: 15px 30px;
     box-sizing: border-box;
@@ -187,7 +187,7 @@ a:focus {
 }
 
 
-.header__item:hover, .header__item:focus, .header__item:active {
+.header__link:hover, .header__link:focus, .header__link:active {
     background: #323749;
     border: 1px solid #323749;
 }
@@ -197,7 +197,7 @@ a:focus {
     border: 1px solid #323749;
 }
 
-.header__item0:last-child{
+.header__item:last-child{
     margin-right:0px;
 }
 
