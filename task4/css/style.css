@@ -95,6 +95,20 @@ body {
     font-family: Montserrat;
     background-color: rgb(0, 0, 0);
 }
+
+a{
+    text-decoration:none;
+}
+
+a:active,
+a:hover {
+    outline: 0;
+}
+
+a:focus {
+    outline: thin dotted;
+}
+
 .wrapper {
 
     max-width: 1260px;
@@ -146,39 +160,17 @@ body {
 
 }
 
+.header__item0{
+    margin-right: 30px;
+}
+
 .header__item{
     border-radius: 25px;
     padding: 15px 30px;
-    margin-right: 30px;
     box-sizing: border-box;
     border: 1px solid rgba(151, 163, 203, 0.3);
-}
+    color:white;
 
-.post_tag__item{
-    border-radius: 25px;
-    padding: 5px 15px;
-    margin-right: 17px;
-    border: 1px solid rgba(151, 163, 203, 0.3);
-}
-
-
-.header__item:hover, .header__item:focus, .header__item:active {
-    background: #323749;
-}
-
-.post_tag__item:hover, .post_tag__item:focus, .post_tag__item:active{
-    background: #323749;
-}
-
-.header__item:last-child{
-    margin-right:0px;
-}
-
-.post_tag__item:last-child{
-    margin-right:0px;
-}
-
-.header__link{
    font-family: Montserrat;
    font-style: normal;
    font-weight: 600;
@@ -186,12 +178,40 @@ body {
    line-height: 20px;
    /* identical to box height, or 154% */
    text-transform: uppercase;
-   color: white;
 
+    
+}
+
+.post_tag__item{
+    margin-right: 17px;
 }
 
 
+.header__item:hover, .header__item:focus, .header__item:active {
+    background: #323749;
+}
+
+.tag__link:hover, .tag__link:focus, .tag__link:active{
+    background: #323749;
+}
+
+.header__item0:last-child{
+    margin-right:0px;
+}
+
+.post_tag__item:last-child{
+    margin-right:0px;
+}
+
+
+
+
+
 .tag__link {
+   border-radius: 25px;
+   padding: 5px 15px;
+   border: 1px solid rgba(151, 163, 203, 0.3);
+
    font-family: Montserrat;
    font-style: normal;
    font-weight: 600;
@@ -208,6 +228,10 @@ body {
  height: 420px;
  margin-bottom: 150px; 
  background-color: rgb(0, 0, 0);
+}
+
+.header__post:hover, .header__post:focus ~ .post__text{
+ color:white;
 }
 
 .post__wrapper {
