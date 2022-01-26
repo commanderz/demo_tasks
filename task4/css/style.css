@@ -259,6 +259,7 @@ a:focus {
 
 .post__text{
   margin-top: 60px;
+  min-width: 292px;
 }
 
 .post__link{
