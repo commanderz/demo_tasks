@@ -201,6 +201,10 @@ a:focus {
     margin-right:0px;
 }
 
+
+
+
+
 .post_tag__item:last-child{
     margin-right:0px;
 }
@@ -231,6 +235,20 @@ a:focus {
  margin-bottom: 150px; 
  background-color: rgb(0, 0, 0);
 }
+
+.header__post:hover .post__link{
+  /*transform: scale(1.10);*/
+  color:white;
+}
+.header__post:hover .post__arrow{
+  left :0px;
+}
+
+.header__post:hover .post__arrow-link{
+   stroke: white; 
+   transition: .9s all;
+}
+
 
 .post__wrapper {
    display: flex;
