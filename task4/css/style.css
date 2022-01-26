@@ -309,6 +309,11 @@ text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     align-items: center;    
 }
 
+.header__more:hover .more_svg{
+    transform: rotate(-180deg);
+    transition: 0.9s;
+}
+
 .more__text{
     margin-left: 20px;
     font-family: Montserrat;
@@ -321,3 +326,4 @@ text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     text-transform: uppercase;
     color: white;
 }
+
