@@ -643,6 +643,13 @@ img{
     margin-bottom: 36px;
 }
 
+.top__caption{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 36px;
+}
 .places__title{
     margin-right: 15px;
 }
@@ -740,7 +747,7 @@ img{
     grid-template-columns: repeat(2,1fr);
     grid-gap: 0 108px;
     align-items: center;
-
+    margin-bottom: 77px;
 }
 
 .tour__title{
@@ -787,4 +794,70 @@ img{
 .tour__more:hover,.tour__more:focus{
     opacity: .65;
 }
+
+.tour__info {
+    padding-left:47px; 
+}
 /* tours end */
+
+/* top-places-to-visit start */
+.top{
+    margin-bottom: 86px;
+}
+
+.top__title{
+    margin-bottom: 54px;
+}
+
+/*
+top__card-title
+top__card-likes
+top__card-likes-value
+top__card-comments
+top__card-comments-value*/
+.top__cards{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr );
+    grid-gap: 57px;
+}
+.top__card-pic{
+    position: relative;
+}
+
+.top__card-stats{
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width:100%;
+
+    display:flex;
+    flex-wrap: wrap;
+    align-items: center;
+    background: rgba(21,24,36,0.6);
+    padding: 16px 25px;
+    justify-content: flex-end;
+}
+.top__card-title, .top__card-likes, .top__card-comments {
+    font-family: Lato;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 24px;
+/* identical to box height, or 150% */
+   color: white;
+}
+
+.top__card-title{
+    margin:0 auto 0 0;
+}
+.top__card-likes{
+    padding-right: 23px;
+    background: url('../img/svg/heart.svg') no-repeat right;
+    margin-right: 14px;
+}
+
+.top__card-comments{
+    padding-right: 23px;
+    background: url('../img/svg/msg.svg') no-repeat right;
+}
+/* top-places-to-visit end */
