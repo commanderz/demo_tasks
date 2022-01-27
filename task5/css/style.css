@@ -449,10 +449,13 @@ img{
     top: 0;
     left: 0;
     width: 100%;
+    transition: 0.2s linear;
+    padding-bottom: 20px;
+    z-index: 99;
 }
 .header_active{
     background: #012f5067;
-    z-index: 1;
+    
 }
 
 .header__wrapper{
@@ -899,3 +902,19 @@ top__card-comments-value*/
     background: #0e66da;
 }
 /* top-places-to-visit end */
+
+
+/* videos start */
+.videos{
+    width:100%;
+}
+
+.videos__wrapper{
+    max-width: 1440px;
+    margin: 0 auto;
+}
+
+.video__item{
+    padding-top: 100%;
+}
+/* videos end */
