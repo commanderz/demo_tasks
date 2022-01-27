@@ -450,6 +450,11 @@ img{
     left: 0;
     width: 100%;
 }
+.header_active{
+    background: #012f5067;
+    z-index: 1;
+}
+
 .header__wrapper{
     display: flex;
     flex-wrap: wrap;
