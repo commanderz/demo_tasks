@@ -859,6 +859,8 @@ top__card-comments-value*/
 .top__card{
     display: flex;
     flex-direction: column;
+    align-items: center;
+    flex-wrap: nowrap;
 }
 
 .top__cards{
@@ -1181,6 +1183,12 @@ top__card-comments-value*/
     .top__card {
         -ms-grid-column-span: 0;
         grid-column: span 0;
+    }
+    .tour__pic, .tour__info{
+        grid-column: span 2;
+    }
+    .tour__pic-mob-first{
+        grid-row-start: -1;
     }
 }
 
