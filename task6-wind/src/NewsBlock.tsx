@@ -1,35 +1,47 @@
+import './index.css';
 import './NewsBlock.css';
 
-function NewsBlock(p: { date: string, tags: string[], img: string, text: string, postlink: string }): JSX.Element {
+interface ITags {
+    slug: string,
+    label: string
+}
+interface IProps {
+    date: string,
+    tags: ITags[],
+    img: string,
+    text: string,
+    postlink: string
+};
+
+function NewsBlock(props: IProps): JSX.Element {
     return (
         <div className="newsBlock w-auto h-auto mb-24 sm:mb-28 xl:mb-36">
             <div className="flex flex-col sm:flex-row flex-nowrap overflow-hidden">
                 <div className='ml-5 sm:ml-0 flex flex-col flex-wrap place-content-between order-2'>
                     <div className="post__date pb-5 sm:pb-12">
-                        {p.date}
+                        {props.date}
                     </div>
 
                     <div className="post__text min-w-min place-self-center pb-7 sm:pb-48">
-                        <a href={p.postlink} className="post__link">
-                            {p.text}
+                        <a href={props.postlink} className="post__link">
+                            {props.text}
                         </a>
                     </div>
 
-                    {p.tags.length > 0 ?
+                    {(props.tags.length > 0) && (
                         <ul className="post_tag__item flex flex-row flex-nowrap items-center mb-1">
-                            {p.tags.map((tag: string, index: number) => (
+                            {props.tags.map((tag: ITags, index: number) => (
                                 <li className="mr-4">
-                                    <a href={"#" + tag} className="tag__link">{tag}</a>
+                                    <a href={tag.slug} className="tag__link">{tag.label}</a>
                                 </li>
                             ))}
                         </ul>
-                        : ""
-                    }
+                    )}
                 </div>
 
                 <div className="ml-0 mr-0 sm:mr-32  order-1 mb-7 sm:mb-0 sm:order-3 place-self-center">
-                    <a href={p.postlink} >
-                        <img className="postimg" src={p.img} alt="Фото 'Макс Фрай'" />
+                    <a href={props.postlink} >
+                        <img className="postimg" src={props.img} alt="Фото 'Макс Фрай'" />
                     </a>
                 </div>
 
