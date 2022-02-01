@@ -36,7 +36,7 @@
 (function () {
 
     const smoothScroll = function (targetEl, duration) {
-        const headerElHeight = document.querySelector('.header').clientHeight;
+        const headerElHeight = document.querySelector('.js-menu').clientHeight;
         let target = document.querySelector(targetEl);
         let targetPosition = target.getBoundingClientRect().top - headerElHeight;
         let startPosition = window.pageYOffset;
